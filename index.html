@@ -1713,22 +1713,61 @@
     // TINDRY // PRINTIFY ATELIER API INTEGRATION (SECURE PROXY PREFERRED)
     // ==========================================
     async function fetchTinDryProducts() {
-      const grid = document.getElementById('products-grid');
-      if (!grid) return;
+  const grid = document.getElementById('products-grid');
+  if (!grid) return;
 
-      try {
-        let products = null;
+  try {
+    const response = await fetch('/api/products');
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status}`);
+    }
 
-        // 1. First attempt: Query secure backend middleware proxy (/api/products)
-        try {
-          const proxyRes = await fetch('/api/products');
-          if (proxyRes.ok) {
-            const proxyData = await proxyRes.json();
-            if (proxyData && Array.isArray(proxyData.data)) {
-              products = proxyData.data;
-            }
-          }
-        } catch (e) {
+    const json = await response.json();
+;
+    // Printify returns products inside the 'data' array
+    const products = json.data || json;
+
+    if (!Array.isArray(products) || products.length === 0) {
+      showPrintifyNotice(grid, 'Atelier queue synced: No live published products found yet.');
+      return;
+    }
+
+    grid.innerHTML = '';
+    products.forEach(product => {
+      const title = product.title || 'TinDry Standard Piece';
+      const image = (product.images && product.images[0] && product.images[0].src) || '/images/lifestyle-tishirt.jpg';
+      const rawPrice = (product.variants && product.variants[0] && product.variants[0].price) ? (product.variants[0].price / 100) : 49.99;
+      const displayPrice = formatPrice(rawPrice);
+      const safeTitle = title.replace(/"/g, '&quot;');
+      const safeDesc = (product.description || 'Exclusive custom garment crafted to the highest international textile standards.').replace(/"/g, '&quot;');
+
+      const card = document.createElement('div');
+      card.className = 'group flex flex-col bg-[#111111] border border-white/10 hover:border-white/25 transition-all';
+      card.innerHTML = `
+        <div class="relative aspect-[3/4] overflow-hidden bg-[#161616]">
+          <img src="${image}" alt="${safeTitle}" class="w-full h-full object-cover object-center filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-700 loading="lazy">
+          <div class="absolute top-3 left-3">
+            <span class="px-2 py-0.5 bg-[#0a0a0a]/90 backdrop-blur-xs text-[9px] font-mono tracking-ultra uppercase text-[#a1a1aa] border border-white/10">Printify Direct</span>
+          </div>
+          <div class="absolute inset-x-3 bottom-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button onclick="openQuickView('${safeTitle}', ${rawPrice}, '${image}', '${safeDesc}')" class="w-full py-2.5 bg-[#0a0a0a]/90 hover:bg-[#0a0a0a] backdrop-blur-md text-white text-[10px] font-mono tracking-widest uppercase border border-white/20 transition-all">Quick View</button>
+          </div>
+        </div>
+        <div class="p-4 flex flex-col flex-grow justify-between space-y-3">
+          <div class="space-y-1">
+            <h3 class="text-xs font-mono tracking-wider text-white uppercase">${safeTitle}</h3>
+            <p class="text-xs text-[#8e8e93] font-light leading-relaxed">${displayPrice}</p>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
+
+  } catch (err) {
+    console.error('Failed to load TinDry products:', err);
+    showPrintifyNotice(grid, 'Atelier connection notice: Unable to fetch live products.');
+  }
+}
+
           // Backend proxy not running in static-only dev mode; will gracefully continue
         }
 
