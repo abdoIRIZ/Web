@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, ArrowLeft } from 'lucide-react';
+import { Menu, ArrowLeft, Coffee } from 'lucide-react';
 
 interface HeaderProps {
   onOpenMobileMenu: () => void;
@@ -83,11 +83,21 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </div>
 
-        {/* Right side minimal branding */}
-        <div className="flex items-center gap-4 text-xs">
-          <span className="text-[11px] font-mono text-neutral-400 select-none hidden sm:inline">
+        {/* Right side - Support Tindry link */}
+        <div className="flex items-center gap-3">
+          <span className="text-[11px] font-mono text-neutral-400 select-none hidden md:inline">
             Fast &middot; Private &middot; Free
           </span>
+          <a
+            href="https://ko-fi.com/tindry"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Support Tindry on Ko-fi"
+            className="inline-flex items-center gap-1.5 py-1.5 px-2.5 sm:px-3 rounded-md border border-neutral-200 hover:border-black text-black hover:bg-neutral-50 transition-colors text-xs font-medium"
+          >
+            <Coffee className="w-3.5 h-3.5 flex-shrink-0" />
+            <span>Support Tindry</span>
+          </a>
         </div>
       </div>
     </header>
