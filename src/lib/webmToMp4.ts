@@ -1,5 +1,6 @@
 import { FFmpeg } from '@ffmpeg/ffmpeg';
-import { toBlobURL, fetchFile } from '@ffmpeg/util';
+import { toBlobURL } from '@ffmpeg/util';
+import { StoredFile } from '../types/file';
 
 export interface WebmToMp4Progress {
   ratio: number;
@@ -64,14 +65,14 @@ export async function getFFmpeg(onStatus?: (msg: string) => void): Promise<FFmpe
  * Works 100% locally on the user's device with zero cloud uploads.
  */
 export async function convertWebmToMp4(
-  file: File,
+  file: StoredFile | File,
   onProgress?: (progress: WebmToMp4Progress) => void
 ): Promise<{ blob: Blob; filename: string }> {
   if (!file) throw new Error('No file selected.');
   if (file.size === 0) throw new Error('Selected WebM file is empty.');
 
   // Validate format extension or mime type
-  const isWebm = file.name.toLowerCase().endsWith('.webm') || file.type.includes('webm');
+  const isWebm = file.name.toLowerCase().endsWith('.webm') || (file.type && file.type.includes('webm'));
   if (!isWebm) {
     throw new Error('Please select a valid WebM video file (.webm).');
   }
@@ -110,8 +111,8 @@ export async function convertWebmToMp4(
 
   try {
     onProgress?.({ ratio: 0.15, message: 'Reading WebM video file into memory...' });
-    const fileData = await fetchFile(file);
-    await ffmpeg.writeFile(inputName, fileData);
+    const buffer = 'buffer' in file ? file.buffer.slice(0) : await file.arrayBuffer();
+    await ffmpeg.writeFile(inputName, new Uint8Array(buffer));
 
     onProgress?.({ ratio: 0.25, message: 'Transcoding WebM to H.264/AAC MP4...' });
 

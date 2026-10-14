@@ -5,18 +5,31 @@ import { FileList } from '../components/FileList';
 import { ProcessingState } from '../components/ProcessingState';
 import { ResultCard } from '../components/ResultCard';
 import { mergePdfFiles, MergePdfProgress } from '../lib/pdfMerge';
+import { StoredFile } from '../types/file';
 
 export const MergePdfTool: React.FC = () => {
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<StoredFile[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState<MergePdfProgress | null>(null);
   const [result, setResult] = useState<{ blob: Blob; filename: string; url: string; pages: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleFilesSelected = (newFiles: File[]) => {
-    setFiles((prev) => [...prev, ...newFiles]);
-    setError(null);
-    setResult(null);
+  const handleFilesSelected = async (newFiles: File[]) => {
+    try {
+      const loaded: StoredFile[] = await Promise.all(
+        newFiles.map(async (f) => ({
+          buffer: await f.arrayBuffer(),
+          name: f.name,
+          type: f.type || 'application/pdf',
+          size: f.size,
+        }))
+      );
+      setFiles((prev) => [...prev, ...loaded]);
+      setError(null);
+      setResult(null);
+    } catch (err: any) {
+      setError('Failed to read PDF into memory: ' + (err?.message || 'unknown error'));
+    }
   };
 
   const handleRemove = (index: number) => {

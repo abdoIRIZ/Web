@@ -5,15 +5,16 @@ import { ProcessingState } from '../components/ProcessingState';
 import { ResultCard } from '../components/ResultCard';
 import { convertWebmToMp4, WebmToMp4Progress } from '../lib/webmToMp4';
 import { formatBytes } from '../lib/utils';
+import { StoredFile } from '../types/file';
 
 export const WebmToMp4Tool: React.FC = () => {
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<StoredFile | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState<WebmToMp4Progress | null>(null);
   const [result, setResult] = useState<{ blob: Blob; filename: string; url: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleFilesSelected = (files: File[]) => {
+  const handleFilesSelected = async (files: File[]) => {
     if (files.length > 0) {
       const selected = files[0];
       const isWebm = selected.name.toLowerCase().endsWith('.webm') || selected.type.includes('webm');
@@ -21,9 +22,19 @@ export const WebmToMp4Tool: React.FC = () => {
         setError('Please select a valid WebM video file (.webm).');
         return;
       }
-      setFile(selected);
-      setError(null);
-      setResult(null);
+      try {
+        const buffer = await selected.arrayBuffer();
+        setFile({
+          buffer,
+          name: selected.name,
+          type: selected.type || 'video/webm',
+          size: selected.size,
+        });
+        setError(null);
+        setResult(null);
+      } catch (err: any) {
+        setError('Failed to read video file into memory: ' + (err?.message || 'unknown error'));
+      }
     }
   };
 

@@ -1,5 +1,6 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import JSZip from 'jszip';
+import { StoredFile } from '../types/file';
 
 // Configure PDF.js worker
 if (typeof window !== 'undefined') {
@@ -20,13 +21,13 @@ export interface PdfToJpgProgress {
 }
 
 export async function convertPdfToJpg(
-  file: File,
+  file: StoredFile | File,
   quality: number = 0.92,
   scale: number = 2.0,
   onProgress?: (progress: PdfToJpgProgress) => void
 ): Promise<{ pages: RenderedPage[]; zipBlob?: Blob }> {
-  const arrayBuffer = await file.arrayBuffer();
-  const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+  const arrayBuffer = 'buffer' in file ? file.buffer.slice(0) : await file.arrayBuffer();
+  const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
   const pdfDoc = await loadingTask.promise;
   const numPages = pdfDoc.numPages;
 

@@ -1,4 +1,5 @@
 import { PDFDocument } from 'pdf-lib';
+import { StoredFile } from '../types/file';
 
 export interface MergePdfProgress {
   current: number;
@@ -10,7 +11,7 @@ export interface MergePdfProgress {
  * Merges multiple PDF files in the order provided into a single PDF blob.
  */
 export async function mergePdfFiles(
-  files: File[],
+  files: (StoredFile | File)[],
   onProgress?: (progress: MergePdfProgress) => void
 ): Promise<{ blob: Blob; pageCount: number }> {
   if (files.length === 0) {
@@ -29,9 +30,9 @@ export async function mergePdfFiles(
     });
 
     try {
-      const arrayBuffer = await file.arrayBuffer();
+      const arrayBuffer = 'buffer' in file ? file.buffer.slice(0) : await file.arrayBuffer();
       // Load the document (ignore encryption issues gracefully if password protected)
-      const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: false });
+      const pdf = await PDFDocument.load(new Uint8Array(arrayBuffer), { ignoreEncryption: false });
       const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
       
       copiedPages.forEach((page) => {

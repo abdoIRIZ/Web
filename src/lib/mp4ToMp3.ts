@@ -1,4 +1,5 @@
 import { Mp3Encoder } from '@breezystack/lamejs';
+import { StoredFile } from '../types/file';
 
 export interface Mp4ToMp3Progress {
   ratio: number;
@@ -13,7 +14,7 @@ export interface Mp4ToMp3Progress {
  * without requiring cross-origin isolation (COOP/COEP) or WebAssembly memory limits.
  */
 export async function convertMp4ToMp3(
-  file: File,
+  file: StoredFile | File,
   bitrateKbps: number = 192,
   onProgress?: (progress: Mp4ToMp3Progress) => void
 ): Promise<{ blob: Blob; filename: string }> {
@@ -21,7 +22,7 @@ export async function convertMp4ToMp3(
   const outputFilename = `${baseName}.mp3`;
 
   onProgress?.({ ratio: 0.1, message: 'Reading video file data...' });
-  const arrayBuffer = await file.arrayBuffer();
+  const arrayBuffer = 'buffer' in file ? file.buffer.slice(0) : await file.arrayBuffer();
 
   onProgress?.({ ratio: 0.25, message: 'Decoding audio stream from video container...' });
 
@@ -119,20 +120,22 @@ export async function convertMp4ToMp3(
  * Fallback audio extractor using video element playback to AudioContext stream
  */
 async function extractAudioViaMediaElement(
-  file: File,
+  file: StoredFile | File,
   onProgress?: (progress: Mp4ToMp3Progress) => void
 ): Promise<AudioBuffer> {
   return new Promise((resolve, reject) => {
     const video = document.createElement('video');
     video.preload = 'auto';
-    video.src = URL.createObjectURL(file);
+    const blob = 'buffer' in file
+      ? new Blob([file.buffer], { type: file.type || 'video/mp4' })
+      : file;
+    video.src = URL.createObjectURL(blob);
     video.muted = false;
 
     video.onloadedmetadata = async () => {
       try {
         const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-        const response = await fetch(video.src);
-        const arrayBuffer = await response.arrayBuffer();
+        const arrayBuffer = 'buffer' in file ? file.buffer.slice(0) : await file.arrayBuffer();
         const decoded = await audioContext.decodeAudioData(arrayBuffer);
         URL.revokeObjectURL(video.src);
         resolve(decoded);

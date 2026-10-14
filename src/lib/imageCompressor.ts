@@ -16,15 +16,20 @@ export interface CompressResult {
   height: number;
 }
 
+import { StoredFile } from '../types/file';
+
 export async function compressImage(
-  file: File,
+  file: StoredFile | File,
   options: CompressOptions
 ): Promise<CompressResult> {
   const originalSize = file.size;
 
   return new Promise((resolve, reject) => {
     const img = new Image();
-    const objectUrl = URL.createObjectURL(file);
+    const blob = 'buffer' in file
+      ? new Blob([file.buffer], { type: file.type || 'image/jpeg' })
+      : file;
+    const objectUrl = URL.createObjectURL(blob);
 
     img.onload = () => {
       URL.revokeObjectURL(objectUrl);

@@ -1,4 +1,5 @@
 import { PDFDocument } from 'pdf-lib';
+import { StoredFile } from '../types/file';
 
 export interface JpgToPdfProgress {
   current: number;
@@ -18,7 +19,7 @@ export interface JpgToPdfOptions {
  * Converts multiple JPG/JPEG (or PNG) files into a single ordered PDF document.
  */
 export async function convertJpgToPdf(
-  files: File[],
+  files: (StoredFile | File)[],
   options: JpgToPdfOptions = {},
   onProgress?: (progress: JpgToPdfProgress) => void
 ): Promise<{ blob: Blob; pageCount: number }> {
@@ -37,13 +38,14 @@ export async function convertJpgToPdf(
     });
 
     try {
-      const arrayBuffer = await file.arrayBuffer();
+      const arrayBuffer = 'buffer' in file ? file.buffer.slice(0) : await file.arrayBuffer();
+      const uint8 = new Uint8Array(arrayBuffer);
       let embeddedImage;
 
       if (file.type === 'image/jpeg' || file.name.toLowerCase().endsWith('.jpg') || file.name.toLowerCase().endsWith('.jpeg')) {
-        embeddedImage = await pdfDoc.embedJpg(arrayBuffer);
+        embeddedImage = await pdfDoc.embedJpg(uint8);
       } else if (file.type === 'image/png' || file.name.toLowerCase().endsWith('.png')) {
-        embeddedImage = await pdfDoc.embedPng(arrayBuffer);
+        embeddedImage = await pdfDoc.embedPng(uint8);
       } else {
         // Fallback: decode via HTMLImageElement canvas to JPEG bytes
         embeddedImage = await embedViaCanvas(file, pdfDoc);
@@ -104,10 +106,13 @@ export async function convertJpgToPdf(
   return { blob, pageCount: files.length };
 }
 
-async function embedViaCanvas(file: File, pdfDoc: PDFDocument) {
+async function embedViaCanvas(file: StoredFile | File, pdfDoc: PDFDocument) {
   return new Promise<any>((resolve, reject) => {
     const img = new Image();
-    const url = URL.createObjectURL(file);
+    const blob = 'buffer' in file
+      ? new Blob([file.buffer], { type: file.type || 'image/jpeg' })
+      : file;
+    const url = URL.createObjectURL(blob);
     img.onload = async () => {
       URL.revokeObjectURL(url);
       const canvas = document.createElement('canvas');
@@ -120,7 +125,7 @@ async function embedViaCanvas(file: File, pdfDoc: PDFDocument) {
         if (!blob) return reject(new Error('Canvas export failed'));
         const buf = await blob.arrayBuffer();
         try {
-          const embedded = await pdfDoc.embedJpg(buf);
+          const embedded = await pdfDoc.embedJpg(new Uint8Array(buf));
           resolve(embedded);
         } catch (e) {
           reject(e);

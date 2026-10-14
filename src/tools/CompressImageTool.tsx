@@ -5,9 +5,10 @@ import { ProcessingState } from '../components/ProcessingState';
 import { ResultCard } from '../components/ResultCard';
 import { compressImage, CompressResult } from '../lib/imageCompressor';
 import { formatBytes } from '../lib/utils';
+import { StoredFile } from '../types/file';
 
 export const CompressImageTool: React.FC = () => {
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<StoredFile | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [quality, setQuality] = useState<number>(0.75);
   const [maxDimension, setMaxDimension] = useState<number | undefined>(undefined);
@@ -15,13 +16,28 @@ export const CompressImageTool: React.FC = () => {
   const [result, setResult] = useState<CompressResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleFilesSelected = (files: File[]) => {
+  const handleFilesSelected = async (files: File[]) => {
     if (files.length > 0) {
-      const selected = files[0];
-      setFile(selected);
-      setPreviewUrl(URL.createObjectURL(selected));
-      setResult(null);
-      setError(null);
+      try {
+        const selected = files[0];
+        const buffer = await selected.arrayBuffer();
+        const stored: StoredFile = {
+          buffer,
+          name: selected.name,
+          type: selected.type || 'image/jpeg',
+          size: selected.size,
+        };
+        setFile(stored);
+        if (previewUrl) {
+          URL.revokeObjectURL(previewUrl);
+        }
+        const blob = new Blob([stored.buffer], { type: stored.type });
+        setPreviewUrl(URL.createObjectURL(blob));
+        setResult(null);
+        setError(null);
+      } catch (err: any) {
+        setError('Failed to read image into memory: ' + (err?.message || 'unknown error'));
+      }
     }
   };
 

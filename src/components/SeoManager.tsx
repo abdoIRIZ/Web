@@ -35,13 +35,13 @@ export const SeoManager: React.FC<SeoManagerProps> = ({ currentView }) => {
     setMeta('property', 'og:url', canonicalUrl);
     setMeta('property', 'og:type', 'website');
     setMeta('property', 'og:site_name', 'Tindry');
-    setMeta('property', 'og:image', `${DOMAIN}/og-image.svg`);
+    setMeta('property', 'og:image', `${DOMAIN}/opengraph-image`);
 
     // Twitter / X
     setMeta('name', 'twitter:card', 'summary_large_image');
     setMeta('name', 'twitter:title', config.title);
     setMeta('name', 'twitter:description', config.description);
-    setMeta('name', 'twitter:image', `${DOMAIN}/og-image.svg`);
+    setMeta('name', 'twitter:image', `${DOMAIN}/opengraph-image`);
 
     // Canonical link
     let canonicalTag = document.querySelector('link[rel="canonical"]');

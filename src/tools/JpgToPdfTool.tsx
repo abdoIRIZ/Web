@@ -5,9 +5,10 @@ import { FileList } from '../components/FileList';
 import { ProcessingState } from '../components/ProcessingState';
 import { ResultCard } from '../components/ResultCard';
 import { convertJpgToPdf, JpgToPdfProgress } from '../lib/jpgToPdf';
+import { StoredFile } from '../types/file';
 
 export const JpgToPdfTool: React.FC = () => {
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<StoredFile[]>([]);
   const [margin, setMargin] = useState<'none' | 'small' | 'standard'>('small');
   const [orientation, setOrientation] = useState<'auto' | 'portrait' | 'landscape'>('auto');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -15,10 +16,22 @@ export const JpgToPdfTool: React.FC = () => {
   const [result, setResult] = useState<{ blob: Blob; filename: string; url: string; pages: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleFilesSelected = (newFiles: File[]) => {
-    setFiles((prev) => [...prev, ...newFiles]);
-    setError(null);
-    setResult(null);
+  const handleFilesSelected = async (newFiles: File[]) => {
+    try {
+      const loaded: StoredFile[] = await Promise.all(
+        newFiles.map(async (f) => ({
+          buffer: await f.arrayBuffer(),
+          name: f.name,
+          type: f.type || 'image/jpeg',
+          size: f.size,
+        }))
+      );
+      setFiles((prev) => [...prev, ...loaded]);
+      setError(null);
+      setResult(null);
+    } catch (err: any) {
+      setError('Failed to read images into memory: ' + (err?.message || 'unknown error'));
+    }
   };
 
   const handleRemove = (index: number) => {

@@ -144,6 +144,19 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
+// Serve social sharing image (Open Graph / Twitter / Telegram / WhatsApp preview)
+app.get(['/opengraph-image', '/opengraph-image.png'], (req, res) => {
+  const distImg = path.join(distPath, 'opengraph-image.png');
+  const publicImg = path.join(__dirname, 'public', 'opengraph-image.png');
+  const target = fs.existsSync(distImg) ? distImg : publicImg;
+  if (fs.existsSync(target)) {
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=604800');
+    return res.sendFile(target);
+  }
+  res.status(404).end();
+});
+
 // Fallback route to serve index.html for single-page routing
 app.get('*', (req, res) => {
   const distIndex = path.join(distPath, 'index.html');

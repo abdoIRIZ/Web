@@ -4,9 +4,10 @@ import { FileUploader } from '../components/FileUploader';
 import { ProcessingState } from '../components/ProcessingState';
 import { convertPdfToJpg, PdfToJpgProgress, RenderedPage } from '../lib/pdfToJpg';
 import { formatBytes, triggerDownload } from '../lib/utils';
+import { StoredFile } from '../types/file';
 
 export const PdfToJpgTool: React.FC = () => {
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<StoredFile | null>(null);
   const [quality, setQuality] = useState<number>(0.92);
   const [scale, setScale] = useState<number>(2.0);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -16,12 +17,23 @@ export const PdfToJpgTool: React.FC = () => {
   const [zipUrl, setZipUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleFilesSelected = (files: File[]) => {
+  const handleFilesSelected = async (files: File[]) => {
     if (files.length > 0) {
-      setFile(files[0]);
-      setError(null);
-      setPages([]);
-      setZipBlob(null);
+      try {
+        const selected = files[0];
+        const buffer = await selected.arrayBuffer();
+        setFile({
+          buffer,
+          name: selected.name,
+          type: selected.type || 'application/pdf',
+          size: selected.size,
+        });
+        setError(null);
+        setPages([]);
+        setZipBlob(null);
+      } catch (err: any) {
+        setError('Failed to read PDF document into memory: ' + (err?.message || 'unknown error'));
+      }
     }
   };
 

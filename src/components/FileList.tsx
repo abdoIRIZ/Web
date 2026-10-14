@@ -10,7 +10,7 @@ import {
 import { formatBytes } from '../lib/utils';
 
 export const FileList: React.FC<{
-  files: File[];
+  files: { name: string; size: number }[];
   onRemove: (index: number) => void;
   onMoveUp?: (index: number) => void;
   onMoveDown?: (index: number) => void;

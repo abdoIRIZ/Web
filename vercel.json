@@ -94,7 +94,11 @@
       "destination": "/index.html"
     },
     {
-      "source": "/((?!api/|assets/|favicon|robots\\.txt|sitemap\\.xml|og-image\\.svg).*)",
+      "source": "/opengraph-image",
+      "destination": "/opengraph-image.png"
+    },
+    {
+      "source": "/((?!api/|assets/|favicon|robots\\.txt|sitemap\\.xml|og-image\\.svg|opengraph-image).*)",
       "destination": "/index.html"
     }
   ]

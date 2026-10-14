@@ -5,20 +5,32 @@ import { ProcessingState } from '../components/ProcessingState';
 import { ResultCard } from '../components/ResultCard';
 import { convertMp4ToMp3, Mp4ToMp3Progress } from '../lib/mp4ToMp3';
 import { formatBytes } from '../lib/utils';
+import { StoredFile } from '../types/file';
 
 export const Mp4ToMp3Tool: React.FC = () => {
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<StoredFile | null>(null);
   const [bitrate, setBitrate] = useState<128 | 192 | 320>(192);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState<Mp4ToMp3Progress | null>(null);
   const [result, setResult] = useState<{ blob: Blob; filename: string; url: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleFilesSelected = (files: File[]) => {
+  const handleFilesSelected = async (files: File[]) => {
     if (files.length > 0) {
-      setFile(files[0]);
-      setError(null);
-      setResult(null);
+      try {
+        const selected = files[0];
+        const buffer = await selected.arrayBuffer();
+        setFile({
+          buffer,
+          name: selected.name,
+          type: selected.type || 'video/mp4',
+          size: selected.size,
+        });
+        setError(null);
+        setResult(null);
+      } catch (err: any) {
+        setError('Failed to read file into memory: ' + (err?.message || 'unknown error'));
+      }
     }
   };
 
