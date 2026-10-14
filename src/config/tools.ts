@@ -1,5 +1,6 @@
 import { 
   Music, 
+  Video,
   Files, 
   FileImage, 
   Image as ImageIcon, 
@@ -7,7 +8,7 @@ import {
   LucideIcon 
 } from 'lucide-react';
 
-export type ToolId = 'mp4-to-mp3' | 'merge-pdf' | 'jpg-to-pdf' | 'pdf-to-jpg' | 'compress-image';
+export type ToolId = 'mp4-to-mp3' | 'webm-to-mp4' | 'merge-pdf' | 'jpg-to-pdf' | 'pdf-to-jpg' | 'compress-image';
 
 export interface ToolDefinition {
   id: ToolId;
@@ -30,6 +31,16 @@ export const TOOLS: ToolDefinition[] = [
     icon: Music,
     acceptedFormats: ['.mp4'],
     acceptedMimeTypes: ['video/mp4'],
+  },
+  {
+    id: 'webm-to-mp4',
+    name: 'WebM to MP4',
+    slug: 'convert/webm-to-mp4',
+    description: 'Convert WebM video recordings into universal MP4 video.',
+    badge: 'Video',
+    icon: Video,
+    acceptedFormats: ['.webm'],
+    acceptedMimeTypes: ['video/webm'],
   },
   {
     id: 'merge-pdf',

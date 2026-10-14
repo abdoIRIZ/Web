@@ -3,11 +3,12 @@ import {
   Home, 
   Layers, 
   Music, 
+  Video,
   Files, 
   FileImage, 
   Image as ImageIcon, 
   Minimize2, 
-  HelpCircle,
+  HelpCircle, 
   X
 } from 'lucide-react';
 
@@ -25,11 +26,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onClose,
 }) => {
   const tools = [
-    { id: 'mp4-to-mp3', label: 'MP4 to MP3', icon: Music },
-    { id: 'merge-pdf', label: 'Merge PDF', icon: Files },
-    { id: 'jpg-to-pdf', label: 'JPG to PDF', icon: FileImage },
-    { id: 'pdf-to-jpg', label: 'PDF to JPG', icon: ImageIcon },
-    { id: 'compress-image', label: 'Compress Image', icon: Minimize2 },
+    { id: 'mp4-to-mp3', label: 'MP4 to MP3', icon: Music, href: '/tools/mp4-to-mp3' },
+    { id: 'webm-to-mp4', label: 'WebM to MP4', icon: Video, href: '/tools/convert/webm-to-mp4' },
+    { id: 'merge-pdf', label: 'Merge PDF', icon: Files, href: '/tools/merge-pdf' },
+    { id: 'jpg-to-pdf', label: 'JPG to PDF', icon: FileImage, href: '/tools/jpg-to-pdf' },
+    { id: 'pdf-to-jpg', label: 'PDF to JPG', icon: ImageIcon, href: '/tools/pdf-to-jpg' },
+    { id: 'compress-image', label: 'Compress Image', icon: Minimize2, href: '/tools/compress-image' },
   ];
 
   const handleItemClick = (id: string) => {
@@ -115,7 +117,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             return (
               <a
                 key={item.id}
-                href={`/tools/${item.id}`}
+                href={item.href || `/tools/${item.id}`}
                 onClick={(e) => { e.preventDefault(); handleItemClick(item.id); }}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition-colors text-left ${
                   isActive

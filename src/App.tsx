@@ -7,6 +7,7 @@ import { FaqView } from './views/FaqView';
 import { ContactView } from './views/ContactView';
 import { LegalView } from './views/LegalView';
 import { Mp4ToMp3Tool } from './tools/Mp4ToMp3Tool';
+import { WebmToMp4Tool } from './tools/WebmToMp4Tool';
 import { MergePdfTool } from './tools/MergePdfTool';
 import { JpgToPdfTool } from './tools/JpgToPdfTool';
 import { PdfToJpgTool } from './tools/PdfToJpgTool';
@@ -21,6 +22,7 @@ function getInitialView(): string {
   if (path === '/') return 'home';
   if (path === '/tools') return 'all-tools';
   if (path === '/tools/mp4-to-mp3' || path === '/mp4-to-mp3') return 'mp4-to-mp3';
+  if (path === '/tools/convert/webm-to-mp4' || path === '/tools/webm-to-mp4' || path === '/webm-to-mp4') return 'webm-to-mp4';
   if (path === '/tools/merge-pdf' || path === '/merge-pdf') return 'merge-pdf';
   if (path === '/tools/jpg-to-pdf' || path === '/jpg-to-pdf') return 'jpg-to-pdf';
   if (path === '/tools/pdf-to-jpg' || path === '/pdf-to-jpg') return 'pdf-to-jpg';
@@ -78,6 +80,8 @@ export function App() {
         return <HomeView onSelectTool={(toolId) => navigateTo(toolId)} />;
       case 'mp4-to-mp3':
         return <Mp4ToMp3Tool />;
+      case 'webm-to-mp4':
+        return <WebmToMp4Tool />;
       case 'merge-pdf':
         return <MergePdfTool />;
       case 'jpg-to-pdf':

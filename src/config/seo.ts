@@ -32,6 +32,14 @@ export const SEO_CONFIGS: Record<string, PageSeoConfig> = {
     h1: 'MP4 to MP3 Converter',
     schemaType: 'WebApplication',
   },
+  'webm-to-mp4': {
+    title: 'WebM to MP4 Converter - Convert WebM to MP4 Online | Tindry',
+    description:
+      'Convert WebM videos and screen recordings into standard MP4 video online with Tindry. Fast, private client-side conversion.',
+    canonicalPath: '/tools/convert/webm-to-mp4',
+    h1: 'WebM to MP4 Converter',
+    schemaType: 'WebApplication',
+  },
   'merge-pdf': {
     title: 'Merge PDF Files Online - Free PDF Merger | Tindry',
     description:

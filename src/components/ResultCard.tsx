@@ -1,5 +1,5 @@
 import React from 'react';
-import { Download, Check, RotateCcw, FileText, Music, Image as ImageIcon } from 'lucide-react';
+import { Download, Check, RotateCcw, FileText, Music, Video, Image as ImageIcon } from 'lucide-react';
 import { formatBytes, triggerDownload } from '../lib/utils';
 
 interface ResultCardProps {
@@ -30,6 +30,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({
   };
 
   const getFileIcon = () => {
+    if (filename.endsWith('.mp4') || filename.endsWith('.webm')) return <Video className="w-5 h-5 text-black" />;
     if (filename.endsWith('.mp3')) return <Music className="w-5 h-5 text-black" />;
     if (filename.endsWith('.pdf')) return <FileText className="w-5 h-5 text-black" />;
     return <ImageIcon className="w-5 h-5 text-black" />;

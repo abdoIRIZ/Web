@@ -50,6 +50,14 @@
       "destination": "/index.html"
     },
     {
+      "source": "/tools/convert/webm-to-mp4",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/tools/webm-to-mp4",
+      "destination": "/index.html"
+    },
+    {
       "source": "/tools/merge-pdf",
       "destination": "/index.html"
     },

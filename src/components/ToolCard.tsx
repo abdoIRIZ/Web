@@ -12,7 +12,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool, onSelect }) => {
 
   return (
     <a
-      href={`/tools/${tool.id}`}
+      href={tool.slug.startsWith('convert/') ? `/tools/${tool.slug}` : `/tools/${tool.id}`}
       onClick={(e) => {
         e.preventDefault();
         onSelect(tool.id);

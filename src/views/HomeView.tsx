@@ -53,7 +53,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onSelectTool }) => {
             {searchQuery ? `Matching Tools (${filteredTools.length})` : 'Tools'}
           </h2>
           <span className="text-[11px] font-mono text-neutral-400">
-            5 Tools
+            {filteredTools.length} Tools
           </span>
         </div>
 

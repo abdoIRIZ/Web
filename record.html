@@ -660,6 +660,14 @@
           </div>
         </div>
 
+        <!-- Small link to WebM to MP4 converter after successful WebM download -->
+        <div id="trConvertLink" style="display: none; margin-top: 14px; padding-top: 12px; border-top: 1px dashed #e5e5e5; font-size: 11px; color: #555555;">
+          <span>Need an MP4?</span>
+          <a href="/tools/convert/webm-to-mp4" target="_blank" style="margin-left: 6px; font-weight: 600; color: #000000; text-decoration: underline;">
+            Convert WebM to MP4 &rarr;
+          </a>
+        </div>
+
       </div>
 
     </div>
@@ -1170,6 +1178,12 @@
         setTimeout(() => {
           document.body.removeChild(a);
         }, 100);
+
+        // Display small link to the new WebM to MP4 converter after successful WebM download
+        const convertLink = document.getElementById('trConvertLink');
+        if (convertLink) {
+          convertLink.style.display = 'block';
+        }
       }
 
       // Reset to initial state for recording again
@@ -1212,6 +1226,11 @@
         trBtnStop.style.display = 'none';
         trBtnDownload.style.display = 'none';
         trBtnReset.style.display = 'none';
+
+        const convertLink = document.getElementById('trConvertLink');
+        if (convertLink) {
+          convertLink.style.display = 'none';
+        }
 
         hideAlert();
       }
