@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /tools/
+Disallow: /tools
 
 Sitemap: https://www.tindry.com/sitemap.xml

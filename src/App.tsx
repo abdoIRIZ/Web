@@ -20,13 +20,47 @@ function getInitialView(): string {
   const path = window.location.pathname.toLowerCase().replace(/\/+$/, '') || '/';
   
   if (path === '/') return 'home';
-  if (path === '/tools') return 'all-tools';
-  if (path === '/tools/mp4-to-mp3' || path === '/mp4-to-mp3') return 'mp4-to-mp3';
-  if (path === '/tools/convert/webm-to-mp4' || path === '/tools/webm-to-mp4' || path === '/webm-to-mp4') return 'webm-to-mp4';
-  if (path === '/tools/merge-pdf' || path === '/merge-pdf') return 'merge-pdf';
-  if (path === '/tools/jpg-to-pdf' || path === '/jpg-to-pdf') return 'jpg-to-pdf';
-  if (path === '/tools/pdf-to-jpg' || path === '/pdf-to-jpg') return 'pdf-to-jpg';
-  if (path === '/tools/compress-image' || path === '/compress-image') return 'compress-image';
+  if (path === '/tools') {
+    window.history.replaceState({}, '', '/');
+    return 'home';
+  }
+  if (path === '/tools/mp4-to-mp3') {
+    window.history.replaceState({}, '', '/mp4-to-mp3');
+    return 'mp4-to-mp3';
+  }
+  if (path === '/mp4-to-mp3') return 'mp4-to-mp3';
+
+  if (path === '/tools/convert/webm-to-mp4' || path === '/tools/webm-to-mp4') {
+    window.history.replaceState({}, '', '/webm-to-mp4');
+    return 'webm-to-mp4';
+  }
+  if (path === '/webm-to-mp4') return 'webm-to-mp4';
+
+  if (path === '/tools/merge-pdf') {
+    window.history.replaceState({}, '', '/merge-pdf');
+    return 'merge-pdf';
+  }
+  if (path === '/merge-pdf') return 'merge-pdf';
+
+  if (path === '/tools/jpg-to-pdf') {
+    window.history.replaceState({}, '', '/jpg-to-pdf');
+    return 'jpg-to-pdf';
+  }
+  if (path === '/jpg-to-pdf') return 'jpg-to-pdf';
+
+  if (path === '/tools/pdf-to-jpg') {
+    window.history.replaceState({}, '', '/pdf-to-jpg');
+    return 'pdf-to-jpg';
+  }
+  if (path === '/pdf-to-jpg') return 'pdf-to-jpg';
+
+  if (path === '/tools/compress-image') {
+    window.history.replaceState({}, '', '/compress-image');
+    return 'compress-image';
+  }
+  if (path === '/compress-image') return 'compress-image';
+
+  if (path === '/screen-record') return 'screen-record';
   if (path === '/faq') return 'faq';
   if (path === '/contact') return 'contact';
   if (path === '/privacy') return 'privacy';
@@ -142,7 +176,7 @@ export function App() {
             <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
               <nav aria-label="Footer navigation" className="flex flex-wrap items-center justify-center gap-4 text-xs font-medium text-neutral-600">
                 <a
-                  href="/tools"
+                  href="/"
                   onClick={(e) => { e.preventDefault(); navigateTo('all-tools'); }}
                   className="hover:text-black transition-colors"
                 >

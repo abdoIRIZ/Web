@@ -29,6 +29,13 @@ export const SeoManager: React.FC<SeoManagerProps> = ({ currentView }) => {
     // Standard Meta
     setMeta('name', 'description', config.description);
 
+    // Robots / Noindex (e.g. for /contact, /privacy, /terms, /faq)
+    if (config.noindex) {
+      setMeta('name', 'robots', 'noindex, follow');
+    } else {
+      setMeta('name', 'robots', 'index, follow');
+    }
+
     // Open Graph
     setMeta('property', 'og:title', config.title);
     setMeta('property', 'og:description', config.description);
@@ -100,7 +107,7 @@ export const SeoManager: React.FC<SeoManagerProps> = ({ currentView }) => {
           '@type': 'SearchAction',
           target: {
             '@type': 'EntryPoint',
-            urlTemplate: `${DOMAIN}/tools?q={search_term_string}`,
+            urlTemplate: `${DOMAIN}/?q={search_term_string}`,
           },
           'query-input': 'required name=search_term_string',
         },

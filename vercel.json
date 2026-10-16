@@ -15,28 +15,43 @@
       "permanent": true
     },
     {
-      "source": "/mp4-to-mp3",
-      "destination": "/tools/mp4-to-mp3",
+      "source": "/tools/mp4-to-mp3",
+      "destination": "/mp4-to-mp3",
       "permanent": true
     },
     {
-      "source": "/merge-pdf",
-      "destination": "/tools/merge-pdf",
+      "source": "/tools/webm-to-mp4",
+      "destination": "/webm-to-mp4",
       "permanent": true
     },
     {
-      "source": "/jpg-to-pdf",
-      "destination": "/tools/jpg-to-pdf",
+      "source": "/tools/convert/webm-to-mp4",
+      "destination": "/webm-to-mp4",
       "permanent": true
     },
     {
-      "source": "/pdf-to-jpg",
-      "destination": "/tools/pdf-to-jpg",
+      "source": "/tools/merge-pdf",
+      "destination": "/merge-pdf",
       "permanent": true
     },
     {
-      "source": "/compress-image",
-      "destination": "/tools/compress-image",
+      "source": "/tools/jpg-to-pdf",
+      "destination": "/jpg-to-pdf",
+      "permanent": true
+    },
+    {
+      "source": "/tools/pdf-to-jpg",
+      "destination": "/pdf-to-jpg",
+      "permanent": true
+    },
+    {
+      "source": "/tools/compress-image",
+      "destination": "/compress-image",
+      "permanent": true
+    },
+    {
+      "source": "/tools",
+      "destination": "/",
       "permanent": true
     }
   ],
@@ -46,35 +61,31 @@
       "destination": "/api/$1"
     },
     {
-      "source": "/tools/mp4-to-mp3",
+      "source": "/mp4-to-mp3",
       "destination": "/index.html"
     },
     {
-      "source": "/tools/convert/webm-to-mp4",
+      "source": "/webm-to-mp4",
       "destination": "/index.html"
     },
     {
-      "source": "/tools/webm-to-mp4",
+      "source": "/merge-pdf",
       "destination": "/index.html"
     },
     {
-      "source": "/tools/merge-pdf",
+      "source": "/jpg-to-pdf",
       "destination": "/index.html"
     },
     {
-      "source": "/tools/jpg-to-pdf",
+      "source": "/pdf-to-jpg",
       "destination": "/index.html"
     },
     {
-      "source": "/tools/pdf-to-jpg",
+      "source": "/compress-image",
       "destination": "/index.html"
     },
     {
-      "source": "/tools/compress-image",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/tools",
+      "source": "/screen-record",
       "destination": "/index.html"
     },
     {
@@ -98,7 +109,7 @@
       "destination": "/opengraph-image.png"
     },
     {
-      "source": "/((?!api/|assets/|favicon|robots\\.txt|sitemap\\.xml|og-image\\.svg|opengraph-image).*)",
+      "source": "/((?!api/|assets/|favicon|robots\\.txt|sitemap\\.xml|og-image\\.svg|opengraph-image|record\\.html).*)",
       "destination": "/index.html"
     }
   ]

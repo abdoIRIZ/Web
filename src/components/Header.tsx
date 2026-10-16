@@ -69,7 +69,7 @@ export const Header: React.FC<HeaderProps> = ({
                   Home
                 </a>
                 <a
-                  href="/tools"
+                  href="/"
                   onClick={(e) => {
                     e.preventDefault();
                     onNavigateTools?.();

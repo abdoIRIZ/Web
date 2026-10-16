@@ -35,7 +35,7 @@ export const TOOLS: ToolDefinition[] = [
   {
     id: 'webm-to-mp4',
     name: 'WebM to MP4',
-    slug: 'convert/webm-to-mp4',
+    slug: 'webm-to-mp4',
     description: 'Convert WebM video recordings into universal MP4 video.',
     badge: 'Video',
     icon: Video,

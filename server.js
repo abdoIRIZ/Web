@@ -35,6 +35,30 @@ app.use((req, res, next) => {
   next();
 });
 
+// 301 Permanent Redirects for legacy /tools/* paths to root clean URLs
+const LEGACY_TOOL_REDIRECTS = {
+  '/tools/mp4-to-mp3': '/mp4-to-mp3',
+  '/tools/webm-to-mp4': '/webm-to-mp4',
+  '/tools/convert/webm-to-mp4': '/webm-to-mp4',
+  '/tools/merge-pdf': '/merge-pdf',
+  '/tools/jpg-to-pdf': '/jpg-to-pdf',
+  '/tools/pdf-to-jpg': '/pdf-to-jpg',
+  '/tools/compress-image': '/compress-image',
+  '/tools': '/',
+  '/tools/': '/',
+};
+
+app.use((req, res, next) => {
+  const cleanPath = req.path.toLowerCase().replace(/\/+$/, '') || '/';
+  if (LEGACY_TOOL_REDIRECTS[cleanPath]) {
+    return res.redirect(301, LEGACY_TOOL_REDIRECTS[cleanPath]);
+  }
+  if (req.path === '/tools' || req.path === '/tools/') {
+    return res.redirect(301, '/');
+  }
+  next();
+});
+
 // Enable CORS for client-to-server calls
 app.use(cors());
 app.use(express.json());

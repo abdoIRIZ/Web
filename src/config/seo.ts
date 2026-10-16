@@ -3,6 +3,7 @@ export interface PageSeoConfig {
   description: string;
   canonicalPath: string;
   h1: string;
+  noindex?: boolean;
   schemaType?: 'WebApplication' | 'WebSite' | 'FAQPage';
   faqItems?: Array<{ question: string; answer: string }>;
 }
@@ -17,59 +18,67 @@ export const SEO_CONFIGS: Record<string, PageSeoConfig> = {
     schemaType: 'WebSite',
   },
   'all-tools': {
-    title: 'All File Tools - Convert, Merge and Compress | Tindry',
+    title: 'Tindry - Simple Online File Tools',
     description:
-      'Browse all online file tools on Tindry. Clean, fast utilities for MP4 to MP3, PDF merging, JPG to PDF, PDF to JPG, and image compression.',
-    canonicalPath: '/tools',
+      'Convert, merge and compress files online with Tindry. Simple and fast tools for MP4 to MP3, PDF merging, JPG to PDF, PDF to JPG and image compression.',
+    canonicalPath: '/',
     h1: 'All File Tools',
     schemaType: 'WebApplication',
   },
   'mp4-to-mp3': {
-    title: 'MP4 to MP3 Converter - Convert Video to Audio | Tindry',
+    title: 'MP4 to MP3 - Extract Audio in Seconds Offline | Tindry',
     description:
-      "Convert MP4 videos to MP3 audio quickly with Tindry's simple online MP4 to MP3 converter.",
-    canonicalPath: '/tools/mp4-to-mp3',
+      'Free MP4 to MP3 converter. Extract audio in seconds. 100% private, no uploads, works offline in your browser.',
+    canonicalPath: '/mp4-to-mp3',
     h1: 'MP4 to MP3 Converter',
     schemaType: 'WebApplication',
   },
   'webm-to-mp4': {
-    title: 'WebM to MP4 Converter - Convert WebM to MP4 Online | Tindry',
+    title: 'WebM to MP4 Converter - Fast Video Conversion | Tindry',
     description:
-      'Convert WebM videos and screen recordings into standard MP4 video online with Tindry. Fast, private client-side conversion.',
-    canonicalPath: '/tools/convert/webm-to-mp4',
+      'Convert WebM to MP4 free. Fast video conversion in browser. No uploads, 100% offline and private.',
+    canonicalPath: '/webm-to-mp4',
     h1: 'WebM to MP4 Converter',
     schemaType: 'WebApplication',
   },
   'merge-pdf': {
-    title: 'Merge PDF Files Online - Free PDF Merger | Tindry',
+    title: 'Merge PDF - Combine PDF Files Easily Free | Tindry',
     description:
-      'Merge multiple PDF files into one PDF document quickly and easily with Tindry.',
-    canonicalPath: '/tools/merge-pdf',
+      'Free Merge PDF tool. Combine multiple PDF files easily. 100% private, no file upload, offline processing.',
+    canonicalPath: '/merge-pdf',
     h1: 'Merge PDF',
     schemaType: 'WebApplication',
   },
   'jpg-to-pdf': {
-    title: 'JPG to PDF Converter - Convert Images to PDF | Tindry',
+    title: 'JPG to PDF Converter - Free & Offline | Tindry',
     description:
-      "Convert JPG and JPEG images into PDF files quickly with Tindry's online JPG to PDF converter.",
-    canonicalPath: '/tools/jpg-to-pdf',
+      'Convert JPG to PDF free. Turn images to PDF online, no upload, 100% private, offline converter.',
+    canonicalPath: '/jpg-to-pdf',
     h1: 'JPG to PDF Converter',
     schemaType: 'WebApplication',
   },
   'pdf-to-jpg': {
-    title: 'PDF to JPG Converter - Convert PDF Pages to Images | Tindry',
+    title: 'PDF to JPG Converter - Extract Images Free | Tindry',
     description:
-      'Convert PDF pages into JPG images quickly and easily with Tindry.',
-    canonicalPath: '/tools/pdf-to-jpg',
+      'Convert PDF to JPG free. Extract images from PDF online, no upload, private & offline.',
+    canonicalPath: '/pdf-to-jpg',
     h1: 'PDF to JPG Converter',
     schemaType: 'WebApplication',
   },
   'compress-image': {
-    title: 'Compress Image Online - Reduce Image Size | Tindry',
+    title: 'Compress Image - Reduce Size No Quality Loss | Tindry',
     description:
-      'Compress images online and reduce file size while maintaining good image quality with Tindry.',
-    canonicalPath: '/tools/compress-image',
+      'Compress images online free. Reduce size with no quality loss. 100% private, no uploads, files stay in browser.',
+    canonicalPath: '/compress-image',
     h1: 'Compress Image',
+    schemaType: 'WebApplication',
+  },
+  'screen-record': {
+    title: 'Screen Record - Directly in Your Browser | Tindry',
+    description:
+      'Free screen recorder directly in browser. No download needed. 100% private, offline, secure screen recording.',
+    canonicalPath: '/screen-record',
+    h1: 'Private Screen Recorder',
     schemaType: 'WebApplication',
   },
   faq: {
@@ -78,6 +87,7 @@ export const SEO_CONFIGS: Record<string, PageSeoConfig> = {
       "Find answers to common questions about Tindry's online file conversion and compression tools.",
     canonicalPath: '/faq',
     h1: 'Frequently Asked Questions',
+    noindex: true,
     schemaType: 'FAQPage',
     faqItems: [
       {
@@ -88,12 +98,12 @@ export const SEO_CONFIGS: Record<string, PageSeoConfig> = {
       {
         question: 'Is Tindry free to use?',
         answer:
-          'Yes. All five file processing tools on Tindry are completely free with no registration required.',
+          'Yes. All file processing tools on Tindry are completely free with no registration required.',
       },
       {
         question: 'How do I convert MP4 videos to MP3 audio?',
         answer:
-          'Select or drag-and-drop your MP4 video file, choose your preferred bitrate (128 kbps, 192 kbps, or 320 kbps), and click Convert to MP3 to immediately download your audio file.',
+          'Select or drag-and-drop your MP4 video file, choose your preferred bitrate, and click Convert to MP3 to immediately download your audio file.',
       },
       {
         question: 'Can I reorder pages when merging PDFs?',
@@ -113,6 +123,7 @@ export const SEO_CONFIGS: Record<string, PageSeoConfig> = {
       'Read the Tindry Privacy Policy. Learn how we prioritize user privacy with client-side, zero-upload file operations.',
     canonicalPath: '/privacy',
     h1: 'Privacy Policy',
+    noindex: true,
     schemaType: 'WebSite',
   },
   terms: {
@@ -121,6 +132,7 @@ export const SEO_CONFIGS: Record<string, PageSeoConfig> = {
       'Read the Terms of Service for using Tindry online file conversion and compression tools.',
     canonicalPath: '/terms',
     h1: 'Terms of Service',
+    noindex: true,
     schemaType: 'WebSite',
   },
   contact: {
@@ -129,6 +141,7 @@ export const SEO_CONFIGS: Record<string, PageSeoConfig> = {
       'Get in touch with the Tindry team for questions, feedback, or technical inquiries.',
     canonicalPath: '/contact',
     h1: 'Contact Tindry',
+    noindex: true,
     schemaType: 'WebSite',
   },
 };

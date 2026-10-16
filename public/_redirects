@@ -1,0 +1,9 @@
+/tools/mp4-to-mp3 /mp4-to-mp3 301
+/tools/webm-to-mp4 /webm-to-mp4 301
+/tools/convert/webm-to-mp4 /webm-to-mp4 301
+/tools/merge-pdf /merge-pdf 301
+/tools/jpg-to-pdf /jpg-to-pdf 301
+/tools/pdf-to-jpg /pdf-to-jpg 301
+/tools/compress-image /compress-image 301
+/tools / 301
+/tools/* /:splat 301
