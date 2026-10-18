@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Image Resizer for Social Media — Instagram, YouTube, Facebook | Tindry</title>
+  <meta name="description" content="Resize photos for Instagram, YouTube, Facebook, and Twitter/X 100% free offline in your browser. Exact pixel dimensions, custom aspect ratios, and zero uploads.">
+  <link rel="canonical" href="https://tindry.com/image-resizer">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #ffffff; color: #000000;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    .tr-header { border-bottom: 1px solid #e5e5e5; background: #fff; position: sticky; top: 0; z-index: 30; }
+    .tr-header-inner {
+      max-width: 960px; margin: 0 auto; padding: 0 20px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .tr-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; }
+    .tr-brand-logo {
+      width: 24px; height: 24px; background: #000; border-radius: 5px;
+      display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 800;
+    }
+    .tr-nav-links { display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 500; color: #666; }
+    .tr-nav-links a:hover { color: #000; }
+    .tr-badge { font-size: 11px; font-family: monospace; color: #888; }
+    .tr-support-btn {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
+      border-radius: 6px; border: 1px solid #e5e5e5; font-size: 12px; font-weight: 600;
+      background: #fff; transition: all 0.15s ease;
+    }
+    .tr-support-btn:hover { border-color: #000; background: #fafafa; }
+    .tr-main { flex: 1; max-width: 860px; width: 100%; margin: 0 auto; padding: 36px 20px 60px; }
+    .tr-heading { margin-bottom: 24px; }
+    .tr-title { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 6px; }
+    .tr-desc { font-size: 13px; color: #666; }
+    .tr-card {
+      background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 24px; margin-bottom: 32px;
+    }
+    .tr-dropzone {
+      border: 2px dashed #d5d5d5; border-radius: 10px; padding: 44px 20px; text-align: center;
+      cursor: pointer; background: #fafafa; transition: all 0.2s ease;
+    }
+    .tr-dropzone:hover, .tr-dropzone.dragover { border-color: #000; background: #f3f3f3; }
+    .tr-dropzone-icon {
+      width: 44px; height: 44px; margin: 0 auto 12px; border: 1px solid #e5e5e5;
+      border-radius: 8px; background: #fff; display: flex; align-items: center; justify-content: center;
+    }
+    .tr-dropzone-text { font-size: 14px; font-weight: 700; color: #000; margin-bottom: 4px; }
+    .tr-dropzone-sub { font-size: 12px; color: #777; }
+    .tr-btn-primary {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px 22px; background: #111; color: #fff; border: none; border-radius: 6px;
+      font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s;
+    }
+    .tr-btn-primary:hover { background: #333; }
+    .tr-btn-secondary {
+      display: inline-flex; align-items: center; justify-content: center; padding: 10px 18px;
+      background: #fff; color: #000; border: 1px solid #d5d5d5; border-radius: 6px;
+      font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s;
+    }
+    .tr-btn-secondary:hover { border-color: #000; }
+    .tr-preset-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin: 16px 0;
+    }
+    .tr-preset-btn {
+      padding: 8px 10px; border: 1px solid #e5e5e5; border-radius: 6px; background: #fff;
+      font-size: 11px; text-align: left; cursor: pointer; transition: all 0.15s;
+    }
+    .tr-preset-btn:hover { border-color: #999; }
+    .tr-preset-btn.active { border-color: #000; background: #000; color: #fff; }
+    .tr-preset-btn strong { display: block; font-size: 12px; }
+    .tr-preview-wrap {
+      border: 1px solid #e5e5e5; border-radius: 8px; padding: 16px; background: #fafafa;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 20px 0;
+    }
+    .tr-preview-img { max-width: 100%; max-height: 280px; object-fit: contain; }
+    .tr-custom-inputs {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 12px; font-size: 12px; margin-top: 12px;
+    }
+    .tr-custom-inputs input[type="number"] {
+      width: 80px; padding: 5px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px;
+    }
+    .tr-trust-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 24px 0;
+      border-top: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5; margin-bottom: 40px;
+    }
+    @media (max-width: 640px) { .tr-trust-row { grid-template-columns: 1fr; } }
+    .tr-trust-item strong { display: block; font-size: 13px; color: #000; margin-bottom: 2px; }
+    .tr-trust-item p { font-size: 12px; color: #666; }
+    .tr-seo-content { margin-top: 32px; color: #333; line-height: 1.7; }
+    .tr-seo-content h2 { font-size: 18px; font-weight: 800; color: #000; margin: 24px 0 8px; }
+    .tr-seo-content p { font-size: 13px; color: #555; margin-bottom: 12px; }
+    .tr-seo-content ol, .tr-seo-content ul { font-size: 13px; color: #555; padding-left: 20px; margin-bottom: 12px; }
+    .tr-seo-content li { margin-bottom: 6px; }
+    .tr-footer { border-top: 1px solid #e5e5e5; padding: 32px 20px; background: #fff; font-size: 12px; color: #666; }
+    .tr-footer-inner { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    .tr-footer-links { display: flex; flex-wrap: wrap; gap: 16px; font-weight: 500; }
+    .tr-footer-links a:hover { color: #000; }
+  </style>
+</head>
+<body>
+
+  <header class="tr-header">
+    <div class="tr-header-inner">
+      <div class="tr-brand">
+        <a href="/" style="display:flex;align-items:center;gap:10px;">
+          <div class="tr-brand-logo">T</div>
+          <span>Tindry</span>
+        </a>
+      </div>
+      <nav class="tr-nav-links">
+        <a href="/">Home</a>
+        <a href="/#tools">Tools</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="tr-badge">Fast &middot; Private &middot; Free</span>
+        <a href="https://ko-fi.com/tindry" target="_blank" rel="noopener noreferrer" class="tr-support-btn">
+          <span>☕ Support Tindry</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="tr-main">
+    <div style="margin-bottom: 16px;">
+      <a href="/" style="font-size: 12px; color: #666;">&larr; Back to all tools</a>
+    </div>
+
+    <div class="tr-heading">
+      <h1 class="tr-title">Image Resizer for Social Media</h1>
+      <p class="tr-desc">Crop and resize images to pixel-perfect formats for Instagram, YouTube, Facebook, and Twitter. 100% private in-browser resizing.</p>
+    </div>
+
+    <div class="tr-card">
+      <div id="dropZone" class="tr-dropzone">
+        <div class="tr-dropzone-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 14 10 14 10 20"></polyline>
+            <polyline points="20 10 14 10 14 4"></polyline>
+            <line x1="14" y1="10" x2="21" y2="3"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+          </svg>
+        </div>
+        <div class="tr-dropzone-text">Drop your image here or click to browse</div>
+        <div class="tr-dropzone-sub">Supports JPG, PNG, WEBP up to 30 MB</div>
+        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+      </div>
+
+      <div id="processArea" style="display: none;">
+        <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #666; margin-bottom: 8px;">Select Social Media Platform:</div>
+
+        <div class="tr-preset-grid">
+          <button class="tr-preset-btn active" data-w="1080" data-h="1080">
+            <strong>IG Square</strong>
+            <span>1080 &times; 1080</span>
+          </button>
+          <button class="tr-preset-btn" data-w="1080" data-h="1350">
+            <strong>IG Portrait</strong>
+            <span>1080 &times; 1350</span>
+          </button>
+          <button class="tr-preset-btn" data-w="1080" data-h="1920">
+            <strong>Story / Reel</strong>
+            <span>1080 &times; 1920</span>
+          </button>
+          <button class="tr-preset-btn" data-w="1280" data-h="720">
+            <strong>YT Thumbnail</strong>
+            <span>1280 &times; 720</span>
+          </button>
+          <button class="tr-preset-btn" data-w="2560" data-h="1440">
+            <strong>YT Banner</strong>
+            <span>2560 &times; 1440</span>
+          </button>
+          <button class="tr-preset-btn" data-w="1200" data-h="630">
+            <strong>FB Post</strong>
+            <span>1200 &times; 630</span>
+          </button>
+          <button class="tr-preset-btn" data-w="1200" data-h="675">
+            <strong>X / Twitter</strong>
+            <span>1200 &times; 675</span>
+          </button>
+          <button class="tr-preset-btn" data-w="1200" data-h="627">
+            <strong>LinkedIn</strong>
+            <span>1200 &times; 627</span>
+          </button>
+        </div>
+
+        <div class="tr-custom-inputs">
+          <label>Custom:</label>
+          <input type="number" id="customW" value="1080" min="10" max="8000">
+          <span>&times;</span>
+          <input type="number" id="customH" value="1080" min="10" max="8000">
+          <span>px</span>
+
+          <label style="margin-left: 12px;">Fit Mode:</label>
+          <select id="fitMode" style="padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:12px;">
+            <option value="cover" selected>Cover (Crop to fill)</option>
+            <option value="contain">Contain (Fit with borders)</option>
+            <option value="stretch">Stretch</option>
+          </select>
+        </div>
+
+        <div class="tr-preview-wrap">
+          <div style="font-size: 11px; font-weight: 700; color: #888; margin-bottom: 6px;" id="dimensionLabel">Output: 1080 x 1080 px</div>
+          <canvas id="outputCanvas" class="tr-preview-img"></canvas>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:8px;">
+          <button id="downloadBtn" class="tr-btn-primary">Download Resized Image</button>
+          <button id="resetBtn" class="tr-btn-secondary">New Image</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trust Features -->
+    <div class="tr-trust-row">
+      <div class="tr-trust-item">
+        <strong>Direct in Browser</strong>
+        <p>Resizes in real-time via local Canvas rendering without uploading any files.</p>
+      </div>
+      <div class="tr-trust-item">
+        <strong>Complete Privacy</strong>
+        <p>Zero server uploads, no data retention, perfectly secure for unpublished marketing campaigns.</p>
+      </div>
+      <div class="tr-trust-item">
+        <strong>Real Outputs</strong>
+        <p>Exact pixel measurements tailored to pass strict social media dimension checks.</p>
+      </div>
+    </div>
+
+    <!-- AdSense SEO Content -->
+    <article class="tr-seo-content">
+      <h2>What is Tindry's Image Resizer for Social Media?</h2>
+      <p>
+        Tindry Image Resizer for Social Media is an instant, client-side dimension tailoring tool designed for digital creators, marketers, photographers, and small business owners. Social platforms like Instagram, YouTube, TikTok, Facebook, LinkedIn, and X (Twitter) have exact aspect ratio and resolution guidelines. Uploading images with incorrect ratios causes automatic compression degradation, awkward cropping, and black borders. Tindry ensures your graphics match standard feed specifications flawlessly.
+      </p>
+
+      <h2>Why use Tindry's Image Resizer? (100% Client-Side Privacy)</h2>
+      <p>
+        Marketing graphics, promotional campaigns, and personal photos often contain sensitive or unreleased intellectual property. Cloud image utilities require uploading your brand assets to their remote storage disks. Tindry executes every crop, scale, and background pad calculation locally in your browser memory. Your images never leave your computer or phone, preventing leaks and protecting your content.
+      </p>
+
+      <h2>How to resize images for social media?</h2>
+      <ol>
+        <li>Drag your photo into the upload box or select an image from your device.</li>
+        <li>Select from standard presets: Instagram Square (1080x1080), Instagram Story (1080x1920), YouTube Thumbnail (1280x720), or enter custom dimensions.</li>
+        <li>Choose a fit mode: <em>Cover</em> fills the entire canvas without borders, while <em>Contain</em> fits the full photo with clean padding.</li>
+        <li>Preview the real-time crop on the interactive canvas.</li>
+        <li>Click <strong>Download Resized Image</strong> to immediately download your platform-ready graphic.</li>
+      </ol>
+
+      <h2>Why is Tindry free?</h2>
+      <p>
+        Tindry does not maintain expensive server-side render clusters because all image manipulation runs on the client's local computing resources. As a result, our operational expenses remain exceptionally low, allowing us to keep all 15 Tindry tools completely free forever without subscriptions, ads, or watermarks.
+      </p>
+    </article>
+  </main>
+
+  <footer class="tr-footer">
+    <div class="tr-footer-inner">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <strong style="color:#000;">Tindry</strong> &middot; Simple file tools that just work &middot; Zero uploads &middot; Complete privacy
+        </div>
+        <div class="tr-footer-links">
+          <a href="/">Home</a>
+          <a href="/#tools">Tools</a>
+          <a href="/faq">FAQ</a>
+          <a href="/contact">Contact</a>
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;font-size:11px;">
+        <a href="https://x.com/TindryOfficial" target="_blank" rel="noopener noreferrer">Follow @TindryOfficial</a>
+        &middot;
+        <a href="https://t.me/TindryCommunity" target="_blank" rel="noopener noreferrer">Join Tindry Community</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('fileInput');
+      const processArea = document.getElementById('processArea');
+      const canvas = document.getElementById('outputCanvas');
+      const ctx = canvas.getContext('2d');
+      const dimensionLabel = document.getElementById('dimensionLabel');
+      const customW = document.getElementById('customW');
+      const customH = document.getElementById('customH');
+      const fitMode = document.getElementById('fitMode');
+      const presetBtns = document.querySelectorAll('.tr-preset-btn');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const resetBtn = document.getElementById('resetBtn');
+
+      let currentImg = null;
+      let targetW = 1080;
+      let targetH = 1080;
+      let baseFileName = 'image';
+
+      dropZone.addEventListener('click', () => fileInput.click());
+      dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+      dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+      });
+      fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) handleFile(fileInput.files[0]);
+      });
+
+      presetBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          presetBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          targetW = parseInt(btn.dataset.w, 10);
+          targetH = parseInt(btn.dataset.h, 10);
+          customW.value = targetW;
+          customH.value = targetH;
+          render();
+        });
+      });
+
+      customW.addEventListener('input', () => {
+        presetBtns.forEach(b => b.classList.remove('active'));
+        targetW = parseInt(customW.value, 10) || 100;
+        render();
+      });
+      customH.addEventListener('input', () => {
+        presetBtns.forEach(b => b.classList.remove('active'));
+        targetH = parseInt(customH.value, 10) || 100;
+        render();
+      });
+      fitMode.addEventListener('change', render);
+
+      function handleFile(file) {
+        baseFileName = file.name.replace(/\.[^/.]+$/, "");
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            currentImg = img;
+            dropZone.style.display = 'none';
+            processArea.style.display = 'block';
+            render();
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function render() {
+        if (!currentImg) return;
+        dimensionLabel.textContent = `Output: ${targetW} x ${targetH} px`;
+        canvas.width = targetW;
+        canvas.height = targetH;
+
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, targetW, targetH);
+
+        const mode = fitMode.value;
+        const srcW = currentImg.naturalWidth;
+        const srcH = currentImg.naturalHeight;
+
+        if (mode === 'stretch') {
+          ctx.drawImage(currentImg, 0, 0, targetW, targetH);
+        } else if (mode === 'contain') {
+          const scale = Math.min(targetW / srcW, targetH / srcH);
+          const dw = srcW * scale;
+          const dh = srcH * scale;
+          const dx = (targetW - dw) / 2;
+          const dy = (targetH - dh) / 2;
+          ctx.drawImage(currentImg, dx, dy, dw, dh);
+        } else {
+          // cover (crop)
+          const scale = Math.max(targetW / srcW, targetH / srcH);
+          const dw = srcW * scale;
+          const dh = srcH * scale;
+          const dx = (targetW - dw) / 2;
+          const dy = (targetH - dh) / 2;
+          ctx.drawImage(currentImg, dx, dy, dw, dh);
+        }
+      }
+
+      downloadBtn.addEventListener('click', () => {
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${baseFileName}-${targetW}x${targetH}.jpg`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }, 'image/jpeg', 0.94);
+      });
+
+      resetBtn.addEventListener('click', () => {
+        currentImg = null;
+        fileInput.value = '';
+        dropZone.style.display = 'block';
+        processArea.style.display = 'none';
+      });
+    })();
+  </script>
+</body>
+</html>

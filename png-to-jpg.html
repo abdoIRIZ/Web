@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free PNG to JPG Converter — Convert PNG with White Background | Tindry</title>
+  <meta name="description" content="Convert PNG images to JPG format 100% free offline in your browser. Choose custom white background for transparency, adjust compression, and download instantly.">
+  <link rel="canonical" href="https://tindry.com/png-to-jpg">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #ffffff; color: #000000;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    .tr-header { border-bottom: 1px solid #e5e5e5; background: #fff; position: sticky; top: 0; z-index: 30; }
+    .tr-header-inner {
+      max-width: 960px; margin: 0 auto; padding: 0 20px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .tr-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; }
+    .tr-brand-logo {
+      width: 24px; height: 24px; background: #000; border-radius: 5px;
+      display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 800;
+    }
+    .tr-nav-links { display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 500; color: #666; }
+    .tr-nav-links a:hover { color: #000; }
+    .tr-badge { font-size: 11px; font-family: monospace; color: #888; }
+    .tr-support-btn {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
+      border-radius: 6px; border: 1px solid #e5e5e5; font-size: 12px; font-weight: 600;
+      background: #fff; transition: all 0.15s ease;
+    }
+    .tr-support-btn:hover { border-color: #000; background: #fafafa; }
+    .tr-main { flex: 1; max-width: 860px; width: 100%; margin: 0 auto; padding: 36px 20px 60px; }
+    .tr-heading { margin-bottom: 24px; }
+    .tr-title { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 6px; }
+    .tr-desc { font-size: 13px; color: #666; }
+    .tr-card {
+      background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 24px; margin-bottom: 32px;
+    }
+    .tr-dropzone {
+      border: 2px dashed #d5d5d5; border-radius: 10px; padding: 44px 20px; text-align: center;
+      cursor: pointer; background: #fafafa; transition: all 0.2s ease;
+    }
+    .tr-dropzone:hover, .tr-dropzone.dragover { border-color: #000; background: #f3f3f3; }
+    .tr-dropzone-icon {
+      width: 44px; height: 44px; margin: 0 auto 12px; border: 1px solid #e5e5e5;
+      border-radius: 8px; background: #fff; display: flex; align-items: center; justify-content: center;
+    }
+    .tr-dropzone-text { font-size: 14px; font-weight: 700; color: #000; margin-bottom: 4px; }
+    .tr-dropzone-sub { font-size: 12px; color: #777; }
+    .tr-btn-primary {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px 22px; background: #111; color: #fff; border: none; border-radius: 6px;
+      font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s;
+    }
+    .tr-btn-primary:hover { background: #333; }
+    .tr-btn-secondary {
+      display: inline-flex; align-items: center; justify-content: center; padding: 10px 18px;
+      background: #fff; color: #000; border: 1px solid #d5d5d5; border-radius: 6px;
+      font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s;
+    }
+    .tr-btn-secondary:hover { border-color: #000; }
+    .tr-preview-box {
+      border: 1px solid #e5e5e5; border-radius: 8px; padding: 16px; background: #fafafa;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 20px 0;
+    }
+    .tr-preview-img { max-width: 100%; max-height: 300px; object-fit: contain; border-radius: 4px; }
+    .tr-meta-banner {
+      display: flex; justify-content: space-between; align-items: center; width: 100%;
+      padding: 12px 16px; background: #f0f0f0; border-radius: 6px; font-size: 12px; margin-bottom: 16px;
+    }
+    .tr-options-row {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 16px; padding-top: 16px; border-top: 1px solid #f0f0f0;
+    }
+    .tr-trust-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 24px 0;
+      border-top: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5; margin-bottom: 40px;
+    }
+    @media (max-width: 640px) { .tr-trust-row { grid-template-columns: 1fr; } }
+    .tr-trust-item strong { display: block; font-size: 13px; color: #000; margin-bottom: 2px; }
+    .tr-trust-item p { font-size: 12px; color: #666; }
+    .tr-seo-content { margin-top: 32px; color: #333; line-height: 1.7; }
+    .tr-seo-content h2 { font-size: 18px; font-weight: 800; color: #000; margin: 24px 0 8px; }
+    .tr-seo-content p { font-size: 13px; color: #555; margin-bottom: 12px; }
+    .tr-seo-content ol, .tr-seo-content ul { font-size: 13px; color: #555; padding-left: 20px; margin-bottom: 12px; }
+    .tr-seo-content li { margin-bottom: 6px; }
+    .tr-footer { border-top: 1px solid #e5e5e5; padding: 32px 20px; background: #fff; font-size: 12px; color: #666; }
+    .tr-footer-inner { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    .tr-footer-links { display: flex; flex-wrap: wrap; gap: 16px; font-weight: 500; }
+    .tr-footer-links a:hover { color: #000; }
+  </style>
+</head>
+<body>
+
+  <header class="tr-header">
+    <div class="tr-header-inner">
+      <div class="tr-brand">
+        <a href="/" style="display:flex;align-items:center;gap:10px;">
+          <div class="tr-brand-logo">T</div>
+          <span>Tindry</span>
+        </a>
+      </div>
+      <nav class="tr-nav-links">
+        <a href="/">Home</a>
+        <a href="/#tools">Tools</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="tr-badge">Fast &middot; Private &middot; Free</span>
+        <a href="https://ko-fi.com/tindry" target="_blank" rel="noopener noreferrer" class="tr-support-btn">
+          <span>☕ Support Tindry</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="tr-main">
+    <div style="margin-bottom: 16px;">
+      <a href="/" style="font-size: 12px; color: #666;">&larr; Back to all tools</a>
+    </div>
+
+    <div class="tr-heading">
+      <h1 class="tr-title">PNG to JPG Converter</h1>
+      <p class="tr-desc">Convert PNG images into lightweight, universal JPG format with customizable white background fill. Works 100% offline in your browser.</p>
+    </div>
+
+    <div class="tr-card">
+      <div id="dropZone" class="tr-dropzone">
+        <div class="tr-dropzone-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+        </div>
+        <div class="tr-dropzone-text">Drop your PNG file here or click to browse</div>
+        <div class="tr-dropzone-sub">Supports all standard PNG graphics up to 50 MB</div>
+        <input type="file" id="fileInput" accept="image/png" style="display: none;">
+      </div>
+
+      <div id="processArea" style="display: none;">
+        <div class="tr-meta-banner" id="metaBanner">
+          <span id="origSizeText">Original: 0 KB</span>
+          <span id="newSizeText">Converted JPG: 0 KB</span>
+          <span id="savingsText" style="font-weight:700;color:#000;"></span>
+        </div>
+
+        <div class="tr-preview-box">
+          <img id="resultImg" class="tr-preview-img" alt="Converted JPG Preview">
+        </div>
+
+        <div class="tr-options-row">
+          <div style="display:flex;align-items:center;gap:16px;font-size:12px;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <label for="bgColor">Background Fill:</label>
+              <select id="bgColor" style="padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:12px;">
+                <option value="#ffffff" selected>Clean White (#FFF)</option>
+                <option value="#000000">Pure Black (#000)</option>
+                <option value="#f5f5f5">Light Gray (#F5F5F5)</option>
+              </select>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:6px;">
+              <label for="qualityRange">Quality:</label>
+              <input type="range" id="qualityRange" min="60" max="100" value="92" style="accent-color:#000;">
+              <span id="qualityVal">92%</span>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;">
+            <button id="downloadBtn" class="tr-btn-primary">Download JPG</button>
+            <button id="resetBtn" class="tr-btn-secondary">Convert Another</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trust Features -->
+    <div class="tr-trust-row">
+      <div class="tr-trust-item">
+        <strong>Direct in Browser</strong>
+        <p>Decodes PNG raster layers and draws onto HTML5 Canvas locally. Zero upload delay.</p>
+      </div>
+      <div class="tr-trust-item">
+        <strong>Complete Privacy</strong>
+        <p>Graphics, screenshots, and logos are rendered in your browser RAM. 100% private.</p>
+      </div>
+      <div class="tr-trust-item">
+        <strong>Real Outputs</strong>
+        <p>Lightweight JPEG files that eliminate transparency black-box glitches on websites.</p>
+      </div>
+    </div>
+
+    <!-- AdSense SEO Content -->
+    <article class="tr-seo-content">
+      <h2>What is Tindry's PNG to JPG Converter?</h2>
+      <p>
+        Tindry PNG to JPG Converter is a fast, client-side graphic transformation tool designed to turn Portable Network Graphics (PNG) files into compressed Joint Photographic Experts Group (JPG/JPEG) images. PNG files are lossless and frequently uncompressed, causing websites to load slowly and emails to exceed attachment limits. Converting them to JPG significantly reduces file weight while preserving visual fidelity.
+      </p>
+
+      <h2>Why use Tindry's PNG to JPG Converter? (Zero Upload Privacy)</h2>
+      <p>
+        Many online file converters process PNG files by uploading your images to remote servers. This puts sensitive documents, personal screenshots, and proprietary company branding at risk of data leakage. Tindry processes your image entirely inside your web browser. Furthermore, our tool solves the common bug where transparent PNG areas turn into unsightly solid black rectangles by automatically applying a crisp, clean white background layer.
+      </p>
+
+      <h2>How to convert PNG to JPG with a white background?</h2>
+      <ol>
+        <li>Drag and drop your PNG image into the upload box or browse files from your computer or phone.</li>
+        <li>Tindry draws the image onto an in-memory canvas pre-filled with your chosen background color (pure white by default).</li>
+        <li>Fine-tune the JPEG quality slider to achieve your desired balance between file size and sharpness.</li>
+        <li>View the instantaneous preview and size comparison.</li>
+        <li>Click <strong>Download JPG</strong> to save the optimized file directly to your downloads folder.</li>
+      </ol>
+
+      <h2>Why is Tindry free?</h2>
+      <p>
+        Because all image processing calculations are handled by your browser's native JavaScript and Canvas engine, Tindry does not incur heavy cloud server compute or storage bills. This lightweight architecture allows us to keep all 15 Tindry file utilities 100% free forever with no subscriptions, account registrations, or watermarks.
+      </p>
+    </article>
+  </main>
+
+  <footer class="tr-footer">
+    <div class="tr-footer-inner">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <strong style="color:#000;">Tindry</strong> &middot; Simple file tools that just work &middot; Zero uploads &middot; Complete privacy
+        </div>
+        <div class="tr-footer-links">
+          <a href="/">Home</a>
+          <a href="/#tools">Tools</a>
+          <a href="/faq">FAQ</a>
+          <a href="/contact">Contact</a>
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;font-size:11px;">
+        <a href="https://x.com/TindryOfficial" target="_blank" rel="noopener noreferrer">Follow @TindryOfficial</a>
+        &middot;
+        <a href="https://t.me/TindryCommunity" target="_blank" rel="noopener noreferrer">Join Tindry Community</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('fileInput');
+      const processArea = document.getElementById('processArea');
+      const resultImg = document.getElementById('resultImg');
+      const origSizeText = document.getElementById('origSizeText');
+      const newSizeText = document.getElementById('newSizeText');
+      const savingsText = document.getElementById('savingsText');
+      const bgColor = document.getElementById('bgColor');
+      const qualityRange = document.getElementById('qualityRange');
+      const qualityVal = document.getElementById('qualityVal');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const resetBtn = document.getElementById('resetBtn');
+
+      let currentImg = null;
+      let currentFile = null;
+      let currentBlob = null;
+      let baseFileName = 'image';
+
+      dropZone.addEventListener('click', () => fileInput.click());
+      dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+      dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+      });
+      fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) handleFile(fileInput.files[0]);
+      });
+
+      qualityRange.addEventListener('input', () => {
+        qualityVal.textContent = qualityRange.value + '%';
+        if (currentImg) renderJpg();
+      });
+
+      bgColor.addEventListener('change', () => {
+        if (currentImg) renderJpg();
+      });
+
+      function handleFile(file) {
+        currentFile = file;
+        baseFileName = file.name.replace(/\.[^/.]+$/, "");
+        origSizeText.textContent = `Original PNG: ${(file.size / 1024).toFixed(1)} KB`;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            currentImg = img;
+            dropZone.style.display = 'none';
+            processArea.style.display = 'block';
+            renderJpg();
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function renderJpg() {
+        if (!currentImg) return;
+        const canvas = document.createElement('canvas');
+        canvas.width = currentImg.naturalWidth;
+        canvas.height = currentImg.naturalHeight;
+        const ctx = canvas.getContext('2d');
+
+        // Fill background color
+        ctx.fillStyle = bgColor.value;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw PNG on top
+        ctx.drawImage(currentImg, 0, 0);
+
+        const quality = parseInt(qualityRange.value, 10) / 100;
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+          currentBlob = blob;
+          const url = URL.createObjectURL(blob);
+          resultImg.src = url;
+
+          const newKb = (blob.size / 1024).toFixed(1);
+          newSizeText.textContent = `Converted JPG: ${newKb} KB`;
+
+          if (currentFile) {
+            const diff = ((currentFile.size - blob.size) / currentFile.size) * 100;
+            if (diff > 0) {
+              savingsText.textContent = `(${Math.round(diff)}% smaller)`;
+            } else {
+              savingsText.textContent = `(High fidelity)`;
+            }
+          }
+        }, 'image/jpeg', quality);
+      }
+
+      downloadBtn.addEventListener('click', () => {
+        if (!currentBlob) return;
+        const url = URL.createObjectURL(currentBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = baseFileName + '.jpg';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      });
+
+      resetBtn.addEventListener('click', () => {
+        currentImg = null;
+        currentFile = null;
+        currentBlob = null;
+        fileInput.value = '';
+        dropZone.style.display = 'block';
+        processArea.style.display = 'none';
+      });
+    })();
+  </script>
+</body>
+</html>

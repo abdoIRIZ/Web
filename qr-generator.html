@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free QR Code Generator — Create Custom QR Codes Offline | Tindry</title>
+  <meta name="description" content="Generate custom QR codes 100% free offline in your browser. Custom colors, high resolution, no expiration dates, no tracking, and zero server uploads.">
+  <link rel="canonical" href="https://tindry.com/qr-generator">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #ffffff; color: #000000;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    .tr-header { border-bottom: 1px solid #e5e5e5; background: #fff; position: sticky; top: 0; z-index: 30; }
+    .tr-header-inner {
+      max-width: 960px; margin: 0 auto; padding: 0 20px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .tr-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; }
+    .tr-brand-logo {
+      width: 24px; height: 24px; background: #000; border-radius: 5px;
+      display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 800;
+    }
+    .tr-nav-links { display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 500; color: #666; }
+    .tr-nav-links a:hover { color: #000; }
+    .tr-badge { font-size: 11px; font-family: monospace; color: #888; }
+    .tr-support-btn {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
+      border-radius: 6px; border: 1px solid #e5e5e5; font-size: 12px; font-weight: 600;
+      background: #fff; transition: all 0.15s ease;
+    }
+    .tr-support-btn:hover { border-color: #000; background: #fafafa; }
+    .tr-main { flex: 1; max-width: 860px; width: 100%; margin: 0 auto; padding: 36px 20px 60px; }
+    .tr-heading { margin-bottom: 24px; }
+    .tr-title { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 6px; }
+    .tr-desc { font-size: 13px; color: #666; }
+    .tr-card {
+      background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 24px; margin-bottom: 32px;
+    }
+    .tr-input-group { margin-bottom: 16px; }
+    .tr-input-label { display: block; font-size: 12px; font-weight: 700; color: #333; margin-bottom: 6px; text-transform: uppercase; }
+    .tr-text-input {
+      width: 100%; padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px;
+      outline: none; transition: border-color 0.15s; font-family: inherit;
+    }
+    .tr-text-input:focus { border-color: #000; }
+    .tr-qr-workspace {
+      display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; align-items: start;
+    }
+    @media (max-width: 640px) { .tr-qr-workspace { grid-template-columns: 1fr; } }
+    .tr-preview-panel {
+      border: 1px solid #e5e5e5; border-radius: 10px; padding: 24px; text-align: center; background: #fafafa;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 280px;
+    }
+    #qrcodeContainer { margin-bottom: 16px; }
+    #qrcodeContainer img { margin: 0 auto; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .tr-btn-primary {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px 22px; background: #111; color: #fff; border: none; border-radius: 6px;
+      font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s;
+    }
+    .tr-btn-primary:hover { background: #333; }
+    .tr-color-picker-row {
+      display: flex; gap: 16px; align-items: center; margin-bottom: 16px; font-size: 12px;
+    }
+    .tr-color-item { display: flex; align-items: center; gap: 6px; }
+    .tr-color-item input[type="color"] {
+      border: 1px solid #ccc; border-radius: 4px; width: 32px; height: 32px; cursor: pointer; padding: 2px;
+    }
+    .tr-trust-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 24px 0;
+      border-top: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5; margin-bottom: 40px;
+    }
+    @media (max-width: 640px) { .tr-trust-row { grid-template-columns: 1fr; } }
+    .tr-trust-item strong { display: block; font-size: 13px; color: #000; margin-bottom: 2px; }
+    .tr-trust-item p { font-size: 12px; color: #666; }
+    .tr-seo-content { margin-top: 32px; color: #333; line-height: 1.7; }
+    .tr-seo-content h2 { font-size: 18px; font-weight: 800; color: #000; margin: 24px 0 8px; }
+    .tr-seo-content p { font-size: 13px; color: #555; margin-bottom: 12px; }
+    .tr-seo-content ol, .tr-seo-content ul { font-size: 13px; color: #555; padding-left: 20px; margin-bottom: 12px; }
+    .tr-seo-content li { margin-bottom: 6px; }
+    .tr-footer { border-top: 1px solid #e5e5e5; padding: 32px 20px; background: #fff; font-size: 12px; color: #666; }
+    .tr-footer-inner { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    .tr-footer-links { display: flex; flex-wrap: wrap; gap: 16px; font-weight: 500; }
+    .tr-footer-links a:hover { color: #000; }
+  </style>
+</head>
+<body>
+
+  <header class="tr-header">
+    <div class="tr-header-inner">
+      <div class="tr-brand">
+        <a href="/" style="display:flex;align-items:center;gap:10px;">
+          <div class="tr-brand-logo">T</div>
+          <span>Tindry</span>
+        </a>
+      </div>
+      <nav class="tr-nav-links">
+        <a href="/">Home</a>
+        <a href="/#tools">Tools</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="tr-badge">Fast &middot; Private &middot; Free</span>
+        <a href="https://ko-fi.com/tindry" target="_blank" rel="noopener noreferrer" class="tr-support-btn">
+          <span>☕ Support Tindry</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="tr-main">
+    <div style="margin-bottom: 16px;">
+      <a href="/" style="font-size: 12px; color: #666;">&larr; Back to all tools</a>
+    </div>
+
+    <div class="tr-heading">
+      <h1 class="tr-title">QR Code Generator</h1>
+      <p class="tr-desc">Create high-resolution, static QR codes with custom colors directly in your browser. Never expires, zero redirect tracking, 100% private.</p>
+    </div>
+
+    <div class="tr-card">
+      <div class="tr-qr-workspace">
+        <!-- Form Controls -->
+        <div>
+          <div class="tr-input-group">
+            <label class="tr-input-label" for="qrType">QR Code Type:</label>
+            <select id="qrType" class="tr-text-input" style="background:#fff;">
+              <option value="url">Website URL (https://...)</option>
+              <option value="text">Plain Text</option>
+              <option value="wifi">Wi-Fi Network</option>
+              <option value="email">Email Address</option>
+              <option value="phone">Phone Number</option>
+            </select>
+          </div>
+
+          <div class="tr-input-group" id="mainInputGroup">
+            <label class="tr-input-label" for="qrContent" id="contentLabel">Enter URL or Text:</label>
+            <textarea id="qrContent" class="tr-text-input" rows="3" placeholder="https://example.com">https://tindry.com</textarea>
+          </div>
+
+          <!-- Wi-Fi Specific Inputs -->
+          <div id="wifiFields" style="display:none;margin-bottom:16px;">
+            <div class="tr-input-group">
+              <label class="tr-input-label" for="wifiSsid">Wi-Fi Name (SSID):</label>
+              <input type="text" id="wifiSsid" class="tr-text-input" placeholder="Home-WiFi">
+            </div>
+            <div class="tr-input-group">
+              <label class="tr-input-label" for="wifiPass">Wi-Fi Password:</label>
+              <input type="text" id="wifiPass" class="tr-text-input" placeholder="SecretPassword123">
+            </div>
+          </div>
+
+          <div class="tr-color-picker-row">
+            <div class="tr-color-item">
+              <label for="fgColor">Foreground:</label>
+              <input type="color" id="fgColor" value="#000000">
+            </div>
+            <div class="tr-color-item">
+              <label for="bgColor">Background:</label>
+              <input type="color" id="bgColor" value="#ffffff">
+            </div>
+          </div>
+
+          <div class="tr-input-group">
+            <label class="tr-input-label" for="qrSize">Output Resolution:</label>
+            <select id="qrSize" class="tr-text-input" style="background:#fff;">
+              <option value="256">Standard (256 &times; 256 px)</option>
+              <option value="512" selected>High-Res (512 &times; 512 px)</option>
+              <option value="1024">Ultra HD Print (1024 &times; 1024 px)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Preview & Download Panel -->
+        <div class="tr-preview-panel">
+          <div id="qrcodeContainer"></div>
+          <button id="downloadBtn" class="tr-btn-primary" style="width:100%;margin-top:12px;">Download QR Code (PNG)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trust Features -->
+    <div class="tr-trust-row">
+      <div class="tr-trust-item">
+        <strong>Direct in Browser</strong>
+        <p>Mathematical matrix generated purely client-side via JavaScript. Zero latency.</p>
+      </div>
+      <div class="tr-trust-item">
+        <strong>Complete Privacy</strong>
+        <p>No redirects, no tracking pixels, and no analytics. Your data stays entirely confidential.</p>
+      </div>
+      <div class="tr-trust-item">
+        <strong>Never Expires</strong>
+        <p>Permanent, authentic static QR code encoding. Works offline and lasts forever.</p>
+      </div>
+    </div>
+
+    <!-- AdSense SEO Content -->
+    <article class="tr-seo-content">
+      <h2>What is Tindry's QR Code Generator?</h2>
+      <p>
+        Quick Response (QR) codes are two-dimensional barcodes capable of storing URLs, credentials, plain text notes, and contact cards in a high-density black-and-white matrix. Unlike predatory QR generators that wrap your URLs in dynamic redirect links that expire after 14 days to force you into a monthly subscription, Tindry generates permanent, static QR codes directly containing your raw destination data. Once generated, your QR code will work forever.
+      </p>
+
+      <h2>Why use Tindry's QR Code Generator? (100% Client-Side Privacy)</h2>
+      <p>
+        When you create QR codes for private Wi-Fi network logins, personal telephone numbers, secret discount vouchers, or internal company links on traditional websites, your sensitive information is logged in remote databases. Tindry encodes the entire QR matrix inside your browser engine. Not a single character is sent over the internet, preventing data scraping and maintaining total confidentiality.
+      </p>
+
+      <h2>How to create custom QR codes?</h2>
+      <ol>
+        <li>Select your content type: Website URL, Plain Text, Wi-Fi Network, Email, or Telephone.</li>
+        <li>Type or paste your information into the input field.</li>
+        <li>Customize the QR code styling by choosing custom foreground and background colors to match your brand palette.</li>
+        <li>Select an output resolution: 512px for digital screens or 1024px for business cards and printed signage.</li>
+        <li>Click <strong>Download QR Code</strong> to save a crisp, high-resolution PNG file to your computer.</li>
+      </ol>
+
+      <h2>Why is Tindry free?</h2>
+      <p>
+        Static QR generation is a mathematical algorithmic computation easily handled in fractions of a millisecond by your computer or smartphone's processor. Because Tindry does not route traffic through redirect servers or store dynamic database records, our overhead is virtually nonexistent. We are proud to provide Tindry's full suite of 15 tools 100% free with no watermarks and no hidden fees.
+      </p>
+    </article>
+  </main>
+
+  <footer class="tr-footer">
+    <div class="tr-footer-inner">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <strong style="color:#000;">Tindry</strong> &middot; Simple file tools that just work &middot; Zero uploads &middot; Complete privacy
+        </div>
+        <div class="tr-footer-links">
+          <a href="/">Home</a>
+          <a href="/#tools">Tools</a>
+          <a href="/faq">FAQ</a>
+          <a href="/contact">Contact</a>
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;font-size:11px;">
+        <a href="https://x.com/TindryOfficial" target="_blank" rel="noopener noreferrer">Follow @TindryOfficial</a>
+        &middot;
+        <a href="https://t.me/TindryCommunity" target="_blank" rel="noopener noreferrer">Join Tindry Community</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      const qrType = document.getElementById('qrType');
+      const mainInputGroup = document.getElementById('mainInputGroup');
+      const contentLabel = document.getElementById('contentLabel');
+      const qrContent = document.getElementById('qrContent');
+      const wifiFields = document.getElementById('wifiFields');
+      const wifiSsid = document.getElementById('wifiSsid');
+      const wifiPass = document.getElementById('wifiPass');
+      const fgColor = document.getElementById('fgColor');
+      const bgColor = document.getElementById('bgColor');
+      const qrSize = document.getElementById('qrSize');
+      const qrcodeContainer = document.getElementById('qrcodeContainer');
+      const downloadBtn = document.getElementById('downloadBtn');
+
+      let qrcodeInstance = null;
+
+      function getPayload() {
+        const type = qrType.value;
+        if (type === 'wifi') {
+          const ssid = wifiSsid.value || '';
+          const pass = wifiPass.value || '';
+          return `WIFI:T:WPA;S:${ssid};P:${pass};;`;
+        }
+        if (type === 'email') {
+          return `mailto:${qrContent.value.trim()}`;
+        }
+        if (type === 'phone') {
+          return `tel:${qrContent.value.trim()}`;
+        }
+        return qrContent.value.trim() || 'https://tindry.com';
+      }
+
+      function updateQR() {
+        qrcodeContainer.innerHTML = '';
+        const payload = getPayload();
+        const size = parseInt(qrSize.value, 10);
+
+        qrcodeInstance = new QRCode(qrcodeContainer, {
+          text: payload,
+          width: 200,
+          height: 200,
+          colorDark: fgColor.value,
+          colorLight: bgColor.value,
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      }
+
+      qrType.addEventListener('change', () => {
+        const type = qrType.value;
+        if (type === 'wifi') {
+          mainInputGroup.style.display = 'none';
+          wifiFields.style.display = 'block';
+        } else {
+          mainInputGroup.style.display = 'block';
+          wifiFields.style.display = 'none';
+          if (type === 'email') {
+            contentLabel.textContent = 'Email Address:';
+            qrContent.placeholder = 'contact@example.com';
+          } else if (type === 'phone') {
+            contentLabel.textContent = 'Phone Number:';
+            qrContent.placeholder = '+1 (555) 000-0000';
+          } else if (type === 'text') {
+            contentLabel.textContent = 'Plain Text:';
+            qrContent.placeholder = 'Enter any note or text here...';
+          } else {
+            contentLabel.textContent = 'Website URL:';
+            qrContent.placeholder = 'https://example.com';
+          }
+        }
+        updateQR();
+      });
+
+      qrContent.addEventListener('input', updateQR);
+      wifiSsid.addEventListener('input', updateQR);
+      wifiPass.addEventListener('input', updateQR);
+      fgColor.addEventListener('input', updateQR);
+      bgColor.addEventListener('input', updateQR);
+      qrSize.addEventListener('change', updateQR);
+
+      downloadBtn.addEventListener('click', () => {
+        const payload = getPayload();
+        const size = parseInt(qrSize.value, 10);
+
+        // Generate full-resolution offscreen canvas
+        const offCanvas = document.createElement('div');
+        const hiresQR = new QRCode(offCanvas, {
+          text: payload,
+          width: size,
+          height: size,
+          colorDark: fgColor.value,
+          colorLight: bgColor.value,
+          correctLevel: QRCode.CorrectLevel.H
+        });
+
+        setTimeout(() => {
+          const img = offCanvas.querySelector('img');
+          const canvas = offCanvas.querySelector('canvas');
+          let dataUrl = '';
+          if (canvas) {
+            dataUrl = canvas.toDataURL('image/png');
+          } else if (img) {
+            dataUrl = img.src;
+          }
+
+          if (dataUrl) {
+            const a = document.createElement('a');
+            a.href = dataUrl;
+            a.download = 'tindry-qr-code.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }
+        }, 100);
+      });
+
+      // Initial render
+      updateQR();
+    })();
+  </script>
+</body>
+</html>

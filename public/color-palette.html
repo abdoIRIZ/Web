@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Color Palette Extractor — Extract Dominant Colors from Images | Tindry</title>
+  <meta name="description" content="Extract beautiful color palettes and hex codes from any image 100% free offline in your browser. Copy CSS variables, export swatches, and keep files private.">
+  <link rel="canonical" href="https://tindry.com/color-palette">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #ffffff; color: #000000;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    .tr-header { border-bottom: 1px solid #e5e5e5; background: #fff; position: sticky; top: 0; z-index: 30; }
+    .tr-header-inner {
+      max-width: 960px; margin: 0 auto; padding: 0 20px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .tr-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; }
+    .tr-brand-logo {
+      width: 24px; height: 24px; background: #000; border-radius: 5px;
+      display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 800;
+    }
+    .tr-nav-links { display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 500; color: #666; }
+    .tr-nav-links a:hover { color: #000; }
+    .tr-badge { font-size: 11px; font-family: monospace; color: #888; }
+    .tr-support-btn {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
+      border-radius: 6px; border: 1px solid #e5e5e5; font-size: 12px; font-weight: 600;
+      background: #fff; transition: all 0.15s ease;
+    }
+    .tr-support-btn:hover { border-color: #000; background: #fafafa; }
+    .tr-main { flex: 1; max-width: 860px; width: 100%; margin: 0 auto; padding: 36px 20px 60px; }
+    .tr-heading { margin-bottom: 24px; }
+    .tr-title { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 6px; }
+    .tr-desc { font-size: 13px; color: #666; }
+    .tr-card {
+      background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 24px; margin-bottom: 32px;
+    }
+    .tr-dropzone {
+      border: 2px dashed #d5d5d5; border-radius: 10px; padding: 44px 20px; text-align: center;
+      cursor: pointer; background: #fafafa; transition: all 0.2s ease;
+    }
+    .tr-dropzone:hover, .tr-dropzone.dragover { border-color: #000; background: #f3f3f3; }
+    .tr-dropzone-icon {
+      width: 44px; height: 44px; margin: 0 auto 12px; border: 1px solid #e5e5e5;
+      border-radius: 8px; background: #fff; display: flex; align-items: center; justify-content: center;
+    }
+    .tr-dropzone-text { font-size: 14px; font-weight: 700; color: #000; margin-bottom: 4px; }
+    .tr-dropzone-sub { font-size: 12px; color: #777; }
+    .tr-btn-primary {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px 22px; background: #111; color: #fff; border: none; border-radius: 6px;
+      font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s;
+    }
+    .tr-btn-primary:hover { background: #333; }
+    .tr-btn-secondary {
+      display: inline-flex; align-items: center; justify-content: center; padding: 10px 18px;
+      background: #fff; color: #000; border: 1px solid #d5d5d5; border-radius: 6px;
+      font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s;
+    }
+    .tr-btn-secondary:hover { border-color: #000; }
+    .tr-palette-display {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 24px 0;
+    }
+    @media (max-width: 640px) { .tr-palette-display { grid-template-columns: repeat(2, 1fr); } }
+    .tr-swatch-card {
+      border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden; background: #fff;
+      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; text-align: center;
+    }
+    .tr-swatch-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .tr-swatch-color { height: 90px; width: 100%; }
+    .tr-swatch-info { padding: 10px 8px; font-size: 12px; font-family: monospace; font-weight: 700; color: #000; }
+    .tr-copy-hint { font-size: 10px; color: #888; font-family: sans-serif; font-weight: normal; margin-top: 2px; }
+    .tr-toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: #000; color: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 100;
+    }
+    .tr-toast.show { opacity: 1; }
+    .tr-trust-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 24px 0;
+      border-top: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5; margin-bottom: 40px;
+    }
+    @media (max-width: 640px) { .tr-trust-row { grid-template-columns: 1fr; } }
+    .tr-trust-item strong { display: block; font-size: 13px; color: #000; margin-bottom: 2px; }
+    .tr-trust-item p { font-size: 12px; color: #666; }
+    .tr-seo-content { margin-top: 32px; color: #333; line-height: 1.7; }
+    .tr-seo-content h2 { font-size: 18px; font-weight: 800; color: #000; margin: 24px 0 8px; }
+    .tr-seo-content p { font-size: 13px; color: #555; margin-bottom: 12px; }
+    .tr-seo-content ol, .tr-seo-content ul { font-size: 13px; color: #555; padding-left: 20px; margin-bottom: 12px; }
+    .tr-seo-content li { margin-bottom: 6px; }
+    .tr-footer { border-top: 1px solid #e5e5e5; padding: 32px 20px; background: #fff; font-size: 12px; color: #666; }
+    .tr-footer-inner { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    .tr-footer-links { display: flex; flex-wrap: wrap; gap: 16px; font-weight: 500; }
+    .tr-footer-links a:hover { color: #000; }
+  </style>
+</head>
+<body>
+
+  <header class="tr-header">
+    <div class="tr-header-inner">
+      <div class="tr-brand">
+        <a href="/" style="display:flex;align-items:center;gap:10px;">
+          <div class="tr-brand-logo">T</div>
+          <span>Tindry</span>
+        </a>
+      </div>
+      <nav class="tr-nav-links">
+        <a href="/">Home</a>
+        <a href="/#tools">Tools</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="tr-badge">Fast &middot; Private &middot; Free</span>
+        <a href="https://ko-fi.com/tindry" target="_blank" rel="noopener noreferrer" class="tr-support-btn">
+          <span>☕ Support Tindry</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="tr-main">
+    <div style="margin-bottom: 16px;">
+      <a href="/" style="font-size: 12px; color: #666;">&larr; Back to all tools</a>
+    </div>
+
+    <div class="tr-heading">
+      <h1 class="tr-title">Color Palette Extractor</h1>
+      <p class="tr-desc">Extract 5 harmonious dominant colors and hex codes from any photograph or design. Click swatches to copy, completely offline.</p>
+    </div>
+
+    <div class="tr-card">
+      <div id="dropZone" class="tr-dropzone">
+        <div class="tr-dropzone-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="13.5" cy="6.5" r=".5" fill="#000"></circle>
+            <circle cx="17.5" cy="10.5" r=".5" fill="#000"></circle>
+            <circle cx="8.5" cy="7.5" r=".5" fill="#000"></circle>
+            <circle cx="6.5" cy="12.5" r=".5" fill="#000"></circle>
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2Z"></path>
+          </svg>
+        </div>
+        <div class="tr-dropzone-text">Drop your image here or click to browse</div>
+        <div class="tr-dropzone-sub">Supports JPG, PNG, WEBP, SVG</div>
+        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+      </div>
+
+      <div id="processArea" style="display: none;">
+        <div style="display:flex;gap:16px;align-items:center;background:#fafafa;padding:12px;border-radius:8px;border:1px solid #e5e5e5;">
+          <img id="previewThumb" style="width:56px;height:56px;object-fit:cover;border-radius:6px;border:1px solid #ddd;" alt="Thumbnail">
+          <div>
+            <div id="fileNameLabel" style="font-size:13px;font-weight:700;color:#000;">Image Loaded</div>
+            <div style="font-size:12px;color:#666;">Top 5 dominant color clusters detected</div>
+          </div>
+        </div>
+
+        <div class="tr-palette-display" id="paletteGrid"></div>
+
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding-top:16px;border-top:1px solid #f0f0f0;">
+          <div style="display:flex;gap:8px;">
+            <button id="copyCssBtn" class="tr-btn-secondary">Copy CSS Variables</button>
+            <button id="copyJsonBtn" class="tr-btn-secondary">Copy JSON</button>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button id="downloadSwatchBtn" class="tr-btn-primary">Download Swatch Image</button>
+            <button id="resetBtn" class="tr-btn-secondary">New Image</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="tr-toast">Hex code copied to clipboard!</div>
+
+    <!-- Trust Features -->
+    <div class="tr-trust-row">
+      <div class="tr-trust-item">
+        <strong>Direct in Browser</strong>
+        <p>Color quantization and median-cut clustering run 100% locally on Canvas pixels.</p>
+      </div>
+      <div class="tr-trust-item">
+        <strong>Complete Privacy</strong>
+        <p>Brand designs, unpublished palettes, and photos never touch any server.</p>
+      </div>
+      <div class="tr-trust-item">
+        <strong>Real Outputs</strong>
+        <p>Instant Hex, RGB, and CSS export options ready for web developers and UI designers.</p>
+      </div>
+    </div>
+
+    <!-- AdSense SEO Content -->
+    <article class="tr-seo-content">
+      <h2>What is Tindry's Color Palette Extractor?</h2>
+      <p>
+        Tindry Color Palette Extractor is an intelligent, client-side aesthetic utility that analyzes the color distribution of any uploaded photo, illustration, or graphic. Using k-means color quantization algorithms, it identifies the five most dominant, harmonious tones and generates precise hex codes (#RRGGBB) and RGB values. It is ideal for UI/UX designers, front-end developers, digital illustrators, and branding specialists building cohesive themes.
+      </p>
+
+      <h2>Why use Tindry's Color Palette Extractor? (Zero Cloud Uploads)</h2>
+      <p>
+        Online color pickers frequently send entire high-resolution images to remote cloud servers to process color histograms, posing confidentiality concerns for unreleased product mockups and client logos. Tindry conducts all pixel sampling locally inside your browser's execution thread. Your graphics remain strictly on your machine, guaranteeing total privacy and immediate speed without queueing.
+      </p>
+
+      <h2>How to extract colors from an image?</h2>
+      <ol>
+        <li>Drag your graphic or photo into the upload box or select an image from your device.</li>
+        <li>Tindry downsamples the image to an in-memory canvas and computes 3D Euclidean distances between color clusters.</li>
+        <li>Explore the generated five dominant color cards.</li>
+        <li>Click on any color chip to copy its exact HEX code directly to your clipboard.</li>
+        <li>Export the full palette as a downloadable PNG swatch card or copy ready-to-use CSS root variables.</li>
+      </ol>
+
+      <h2>Why is Tindry free?</h2>
+      <p>
+        Because all image sampling and mathematical color computations are performed directly on your local device, Tindry incurs zero server processing or database overhead. We pass this cost advantage entirely to you, keeping all 15 Tindry productivity tools 100% free with no subscriptions, sign-ups, or watermarks.
+      </p>
+    </article>
+  </main>
+
+  <footer class="tr-footer">
+    <div class="tr-footer-inner">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <strong style="color:#000;">Tindry</strong> &middot; Simple file tools that just work &middot; Zero uploads &middot; Complete privacy
+        </div>
+        <div class="tr-footer-links">
+          <a href="/">Home</a>
+          <a href="/#tools">Tools</a>
+          <a href="/faq">FAQ</a>
+          <a href="/contact">Contact</a>
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;font-size:11px;">
+        <a href="https://x.com/TindryOfficial" target="_blank" rel="noopener noreferrer">Follow @TindryOfficial</a>
+        &middot;
+        <a href="https://t.me/TindryCommunity" target="_blank" rel="noopener noreferrer">Join Tindry Community</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('fileInput');
+      const processArea = document.getElementById('processArea');
+      const previewThumb = document.getElementById('previewThumb');
+      const fileNameLabel = document.getElementById('fileNameLabel');
+      const paletteGrid = document.getElementById('paletteGrid');
+      const toast = document.getElementById('toast');
+      const copyCssBtn = document.getElementById('copyCssBtn');
+      const copyJsonBtn = document.getElementById('copyJsonBtn');
+      const downloadSwatchBtn = document.getElementById('downloadSwatchBtn');
+      const resetBtn = document.getElementById('resetBtn');
+
+      let extractedHexes = [];
+
+      dropZone.addEventListener('click', () => fileInput.click());
+      dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+      dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+      });
+      fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) handleFile(fileInput.files[0]);
+      });
+
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+      }
+
+      function handleFile(file) {
+        fileNameLabel.textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          previewThumb.src = e.target.result;
+          const img = new Image();
+          img.onload = () => {
+            dropZone.style.display = 'none';
+            processArea.style.display = 'block';
+            extractColors(img);
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function extractColors(img) {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const sampleSize = 100;
+        canvas.width = sampleSize;
+        canvas.height = sampleSize;
+        ctx.drawImage(img, 0, 0, sampleSize, sampleSize);
+
+        const imgData = ctx.getImageData(0, 0, sampleSize, sampleSize).data;
+        const colorBuckets = {};
+
+        // Quantize colors to reduce noise
+        for (let i = 0; i < imgData.length; i += 16) {
+          const r = Math.round(imgData[i] / 24) * 24;
+          const g = Math.round(imgData[i + 1] / 24) * 24;
+          const b = Math.round(imgData[i + 2] / 24) * 24;
+          const a = imgData[i + 3];
+          if (a > 128) {
+            const key = `${r},${g},${b}`;
+            colorBuckets[key] = (colorBuckets[key] || 0) + 1;
+          }
+        }
+
+        // Sort by frequency and take distinct colors
+        const sorted = Object.entries(colorBuckets).sort((a, b) => b[1] - a[1]);
+        const distinct = [];
+
+        for (let [rgbStr] of sorted) {
+          const [r, g, b] = rgbStr.split(',').map(Number);
+          let isTooClose = false;
+          for (const d of distinct) {
+            const dist = Math.sqrt(Math.pow(r - d.r, 2) + Math.pow(g - d.g, 2) + Math.pow(b - d.b, 2));
+            if (dist < 48) {
+              isTooClose = true;
+              break;
+            }
+          }
+          if (!isTooClose) {
+            distinct.push({ r, g, b });
+            if (distinct.length === 5) break;
+          }
+        }
+
+        // Pad if necessary
+        while (distinct.length < 5) {
+          distinct.push({ r: 255 - distinct.length * 40, g: 255 - distinct.length * 40, b: 255 - distinct.length * 40 });
+        }
+
+        extractedHexes = distinct.map(c => rgbToHex(c.r, c.g, c.b));
+        renderPalette(extractedHexes);
+      }
+
+      function rgbToHex(r, g, b) {
+        return "#" + [r, g, b].map(x => {
+          const hex = Math.min(255, Math.max(0, x)).toString(16);
+          return hex.length === 1 ? "0" + hex : hex;
+        }).join("").toUpperCase();
+      }
+
+      function renderPalette(hexes) {
+        paletteGrid.innerHTML = '';
+        hexes.forEach(hex => {
+          const card = document.createElement('div');
+          card.className = 'tr-swatch-card';
+          card.innerHTML = `
+            <div class="tr-swatch-color" style="background-color: ${hex};"></div>
+            <div class="tr-swatch-info">
+              <div>${hex}</div>
+              <div class="tr-copy-hint">Click to copy</div>
+            </div>
+          `;
+          card.addEventListener('click', () => {
+            navigator.clipboard.writeText(hex);
+            showToast(`Copied ${hex} to clipboard!`);
+          });
+          paletteGrid.appendChild(card);
+        });
+      }
+
+      copyCssBtn.addEventListener('click', () => {
+        const css = `:root {\n` + extractedHexes.map((hex, i) => `  --color-${i + 1}: ${hex};`).join('\n') + `\n}`;
+        navigator.clipboard.writeText(css);
+        showToast('Copied CSS Variables to clipboard!');
+      });
+
+      copyJsonBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(JSON.stringify(extractedHexes, null, 2));
+        showToast('Copied JSON palette to clipboard!');
+      });
+
+      downloadSwatchBtn.addEventListener('click', () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1000;
+        canvas.height = 300;
+        const ctx = canvas.getContext('2d');
+
+        const colW = canvas.width / extractedHexes.length;
+        extractedHexes.forEach((hex, i) => {
+          ctx.fillStyle = hex;
+          ctx.fillRect(i * colW, 0, colW, 230);
+
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(i * colW, 230, colW, 70);
+
+          ctx.fillStyle = '#000000';
+          ctx.font = 'bold 20px monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText(hex, i * colW + colW / 2, 275);
+        });
+
+        canvas.toBlob((blob) => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'tindry-palette.png';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        });
+      });
+
+      resetBtn.addEventListener('click', () => {
+        fileInput.value = '';
+        dropZone.style.display = 'block';
+        processArea.style.display = 'none';
+      });
+    })();
+  </script>
+</body>
+</html>

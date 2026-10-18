@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Word Counter & Case Converter — Real-Time Text Tools | Tindry</title>
+  <meta name="description" content="Count words, characters, sentences, and convert text case 100% free offline in your browser. Real-time statistics, instant case converters, and zero server uploads.">
+  <link rel="canonical" href="https://tindry.com/word-counter">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #ffffff; color: #000000;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    .tr-header { border-bottom: 1px solid #e5e5e5; background: #fff; position: sticky; top: 0; z-index: 30; }
+    .tr-header-inner {
+      max-width: 960px; margin: 0 auto; padding: 0 20px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .tr-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; }
+    .tr-brand-logo {
+      width: 24px; height: 24px; background: #000; border-radius: 5px;
+      display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 800;
+    }
+    .tr-nav-links { display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 500; color: #666; }
+    .tr-nav-links a:hover { color: #000; }
+    .tr-badge { font-size: 11px; font-family: monospace; color: #888; }
+    .tr-support-btn {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
+      border-radius: 6px; border: 1px solid #e5e5e5; font-size: 12px; font-weight: 600;
+      background: #fff; transition: all 0.15s ease;
+    }
+    .tr-support-btn:hover { border-color: #000; background: #fafafa; }
+    .tr-main { flex: 1; max-width: 860px; width: 100%; margin: 0 auto; padding: 36px 20px 60px; }
+    .tr-heading { margin-bottom: 24px; }
+    .tr-title { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 6px; }
+    .tr-desc { font-size: 13px; color: #666; }
+    .tr-card {
+      background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 24px; margin-bottom: 32px;
+    }
+    .tr-stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px;
+    }
+    @media (max-width: 640px) { .tr-stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    .tr-stat-box {
+      background: #fafafa; border: 1px solid #e5e5e5; border-radius: 8px; padding: 14px; text-align: center;
+    }
+    .tr-stat-num { font-size: 24px; font-weight: 800; color: #000; line-height: 1.1; }
+    .tr-stat-label { font-size: 11px; text-transform: uppercase; color: #777; font-weight: 700; margin-top: 4px; }
+    .tr-textarea {
+      width: 100%; min-height: 220px; padding: 16px; border: 1px solid #ccc; border-radius: 8px;
+      font-size: 14px; line-height: 1.6; font-family: inherit; outline: none; transition: border-color 0.15s;
+    }
+    .tr-textarea:focus { border-color: #000; }
+    .tr-actions-bar {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; align-items: center; justify-content: space-between;
+    }
+    .tr-case-buttons { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tr-btn-tag {
+      padding: 6px 12px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 4px;
+      font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s;
+    }
+    .tr-btn-tag:hover { background: #000; color: #fff; border-color: #000; }
+    .tr-btn-primary {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 9px 18px; background: #111; color: #fff; border: none; border-radius: 6px;
+      font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s;
+    }
+    .tr-btn-primary:hover { background: #333; }
+    .tr-toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: #000; color: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 100;
+    }
+    .tr-toast.show { opacity: 1; }
+    .tr-trust-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 24px 0;
+      border-top: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5; margin-bottom: 40px;
+    }
+    @media (max-width: 640px) { .tr-trust-row { grid-template-columns: 1fr; } }
+    .tr-trust-item strong { display: block; font-size: 13px; color: #000; margin-bottom: 2px; }
+    .tr-trust-item p { font-size: 12px; color: #666; }
+    .tr-seo-content { margin-top: 32px; color: #333; line-height: 1.7; }
+    .tr-seo-content h2 { font-size: 18px; font-weight: 800; color: #000; margin: 24px 0 8px; }
+    .tr-seo-content p { font-size: 13px; color: #555; margin-bottom: 12px; }
+    .tr-seo-content ol, .tr-seo-content ul { font-size: 13px; color: #555; padding-left: 20px; margin-bottom: 12px; }
+    .tr-seo-content li { margin-bottom: 6px; }
+    .tr-footer { border-top: 1px solid #e5e5e5; padding: 32px 20px; background: #fff; font-size: 12px; color: #666; }
+    .tr-footer-inner { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    .tr-footer-links { display: flex; flex-wrap: wrap; gap: 16px; font-weight: 500; }
+    .tr-footer-links a:hover { color: #000; }
+  </style>
+</head>
+<body>
+
+  <header class="tr-header">
+    <div class="tr-header-inner">
+      <div class="tr-brand">
+        <a href="/" style="display:flex;align-items:center;gap:10px;">
+          <div class="tr-brand-logo">T</div>
+          <span>Tindry</span>
+        </a>
+      </div>
+      <nav class="tr-nav-links">
+        <a href="/">Home</a>
+        <a href="/#tools">Tools</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="tr-badge">Fast &middot; Private &middot; Free</span>
+        <a href="https://ko-fi.com/tindry" target="_blank" rel="noopener noreferrer" class="tr-support-btn">
+          <span>☕ Support Tindry</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="tr-main">
+    <div style="margin-bottom: 16px;">
+      <a href="/" style="font-size: 12px; color: #666;">&larr; Back to all tools</a>
+    </div>
+
+    <div class="tr-heading">
+      <h1 class="tr-title">Word Counter &amp; Case Converter</h1>
+      <p class="tr-desc">Calculate words, characters, reading time, and transform text cases in real-time. 100% private, no text ever leaves your browser.</p>
+    </div>
+
+    <div class="tr-card">
+      <div class="tr-stats-grid">
+        <div class="tr-stat-box">
+          <div class="tr-stat-num" id="statWords">0</div>
+          <div class="tr-stat-label">Words</div>
+        </div>
+        <div class="tr-stat-box">
+          <div class="tr-stat-num" id="statChars">0</div>
+          <div class="tr-stat-label">Characters</div>
+        </div>
+        <div class="tr-stat-box">
+          <div class="tr-stat-num" id="statSentences">0</div>
+          <div class="tr-stat-label">Sentences</div>
+        </div>
+        <div class="tr-stat-box">
+          <div class="tr-stat-num" id="statReadTime">0m</div>
+          <div class="tr-stat-label">Reading Time</div>
+        </div>
+      </div>
+
+      <textarea id="textInput" class="tr-textarea" placeholder="Type or paste your text here to count words and change case..."></textarea>
+
+      <div class="tr-actions-bar">
+        <div class="tr-case-buttons">
+          <button class="tr-btn-tag" id="btnUpper">UPPERCASE</button>
+          <button class="tr-btn-tag" id="btnLower">lowercase</button>
+          <button class="tr-btn-tag" id="btnTitle">Title Case</button>
+          <button class="tr-btn-tag" id="btnSentence">Sentence case</button>
+          <button class="tr-btn-tag" id="btnCamel">camelCase</button>
+          <button class="tr-btn-tag" id="btnSnake">snake_case</button>
+          <button class="tr-btn-tag" id="btnClean">Clean Spaces</button>
+        </div>
+
+        <div style="display:flex;gap:8px;">
+          <button id="btnCopy" class="tr-btn-primary">Copy Text</button>
+          <button id="btnClear" class="tr-btn-tag" style="background:#fff;">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="tr-toast">Copied to clipboard!</div>
+
+    <!-- Trust Features -->
+    <div class="tr-trust-row">
+      <div class="tr-trust-item">
+        <strong>Direct in Browser</strong>
+        <p>Text analysis and regex transformations execute locally. Instantaneous performance.</p>
+      </div>
+      <div class="tr-trust-item">
+        <strong>Complete Privacy</strong>
+        <p>Confidential memos, academic papers, and passwords never leave your device.</p>
+      </div>
+      <div class="tr-trust-item">
+        <strong>Real Outputs</strong>
+        <p>Formatted text ready to paste directly into documents, coding editors, or social posts.</p>
+      </div>
+    </div>
+
+    <!-- AdSense SEO Content -->
+    <article class="tr-seo-content">
+      <h2>What is Tindry's Word Counter &amp; Case Converter?</h2>
+      <p>
+        Tindry Word Counter & Case Converter is a comprehensive real-time writing analytics and text formatting suite. Writers, editors, researchers, students, and software engineers frequently need to monitor word count constraints for essays, academic journal submissions, Twitter character limits, and SEO meta tags. In addition, our multi-format case converter instantly flips text between UPPERCASE, lowercase, Title Case, Sentence case, camelCase, and snake_case without requiring manual retyping.
+      </p>
+
+      <h2>Why use Tindry's Word Counter? (100% Client-Side Privacy)</h2>
+      <p>
+        When you paste confidential legal contracts, unreleased manuscripts, proprietary code comments, or private journal entries into online word counters, your text is routinely saved in server logs or used to train commercial language models. Tindry runs all tokenization, character counting, and string manipulation locally on your device's browser thread. No text is ever uploaded, cached, or seen by anyone.
+      </p>
+
+      <h2>How to count words and convert text cases?</h2>
+      <ol>
+        <li>Paste or type your content into the main writing area above.</li>
+        <li>Review your metrics: Total Words, Character Count, Sentence Count, and Estimated Reading Time.</li>
+        <li>Click any transformation button (e.g. <strong>Title Case</strong> for headline capitalization or <strong>Clean Spaces</strong> to remove rogue tabs and trailing whitespaces).</li>
+        <li>Click <strong>Copy Text</strong> to copy the converted result to your clipboard in one tap.</li>
+      </ol>
+
+      <h2>Why is Tindry free?</h2>
+      <p>
+        Client-side text parsing requires minimal processor cycles and incurs zero server network bandwidth. By building intelligent tools that run directly inside your browser rather than relying on heavy server clusters, Tindry delivers this complete collection of 15 tools 100% free forever without subscriptions, advertising popups, or limits.
+      </p>
+    </article>
+  </main>
+
+  <footer class="tr-footer">
+    <div class="tr-footer-inner">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <strong style="color:#000;">Tindry</strong> &middot; Simple file tools that just work &middot; Zero uploads &middot; Complete privacy
+        </div>
+        <div class="tr-footer-links">
+          <a href="/">Home</a>
+          <a href="/#tools">Tools</a>
+          <a href="/faq">FAQ</a>
+          <a href="/contact">Contact</a>
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;font-size:11px;">
+        <a href="https://x.com/TindryOfficial" target="_blank" rel="noopener noreferrer">Follow @TindryOfficial</a>
+        &middot;
+        <a href="https://t.me/TindryCommunity" target="_blank" rel="noopener noreferrer">Join Tindry Community</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      const textInput = document.getElementById('textInput');
+      const statWords = document.getElementById('statWords');
+      const statChars = document.getElementById('statChars');
+      const statSentences = document.getElementById('statSentences');
+      const statReadTime = document.getElementById('statReadTime');
+      const toast = document.getElementById('toast');
+
+      const btnUpper = document.getElementById('btnUpper');
+      const btnLower = document.getElementById('btnLower');
+      const btnTitle = document.getElementById('btnTitle');
+      const btnSentence = document.getElementById('btnSentence');
+      const btnCamel = document.getElementById('btnCamel');
+      const btnSnake = document.getElementById('btnSnake');
+      const btnClean = document.getElementById('btnClean');
+      const btnCopy = document.getElementById('btnCopy');
+      const btnClear = document.getElementById('btnClear');
+
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+      }
+
+      function updateStats() {
+        const val = textInput.value;
+        const words = val.trim() ? val.trim().split(/\s+/).length : 0;
+        const chars = val.length;
+        const sentences = val.trim() ? (val.match(/[^.!?]+[.!?]+(\s|$)/g) || [1]).length : 0;
+        const readTimeMinutes = Math.ceil(words / 200);
+
+        statWords.textContent = words.toLocaleString();
+        statChars.textContent = chars.toLocaleString();
+        statSentences.textContent = sentences.toLocaleString();
+        statReadTime.textContent = (words > 0 ? readTimeMinutes : 0) + 'm';
+      }
+
+      textInput.addEventListener('input', updateStats);
+
+      btnUpper.addEventListener('click', () => {
+        textInput.value = textInput.value.toUpperCase();
+        updateStats();
+      });
+
+      btnLower.addEventListener('click', () => {
+        textInput.value = textInput.value.toLowerCase();
+        updateStats();
+      });
+
+      btnTitle.addEventListener('click', () => {
+        textInput.value = textInput.value.toLowerCase().replace(/(^|\s)\w/g, c => c.toUpperCase());
+        updateStats();
+      });
+
+      btnSentence.addEventListener('click', () => {
+        textInput.value = textInput.value.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, c => c.toUpperCase());
+        updateStats();
+      });
+
+      btnCamel.addEventListener('click', () => {
+        textInput.value = textInput.value
+          .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase())
+          .replace(/^[A-Z]/, c => c.toLowerCase());
+        updateStats();
+      });
+
+      btnSnake.addEventListener('click', () => {
+        textInput.value = textInput.value
+          .trim()
+          .toLowerCase()
+          .replace(/[\s\W-]+/g, '_');
+        updateStats();
+      });
+
+      btnClean.addEventListener('click', () => {
+        textInput.value = textInput.value.replace(/[ \t]+/g, ' ').replace(/\n\s*\n/g, '\n\n').trim();
+        updateStats();
+      });
+
+      btnCopy.addEventListener('click', () => {
+        if (!textInput.value) return;
+        navigator.clipboard.writeText(textInput.value);
+        showToast('Text copied to clipboard!');
+      });
+
+      btnClear.addEventListener('click', () => {
+        textInput.value = '';
+        updateStats();
+      });
+    })();
+  </script>
+</body>
+</html>

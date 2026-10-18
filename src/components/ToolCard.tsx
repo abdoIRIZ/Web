@@ -12,8 +12,11 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool, onSelect }) => {
 
   return (
     <a
-      href={`/${tool.id}`}
+      href={tool.externalUrl || `/${tool.id}`}
       onClick={(e) => {
+        if (tool.externalUrl) {
+          return;
+        }
         e.preventDefault();
         onSelect(tool.id);
       }}
