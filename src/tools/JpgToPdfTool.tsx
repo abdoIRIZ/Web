@@ -6,6 +6,7 @@ import { ProcessingState } from '../components/ProcessingState';
 import { ResultCard } from '../components/ResultCard';
 import { convertJpgToPdf, JpgToPdfProgress } from '../lib/jpgToPdf';
 import { StoredFile } from '../types/file';
+import { ToolEditorialSection } from '../components/ToolEditorialSection';
 
 export const JpgToPdfTool: React.FC = () => {
   const [files, setFiles] = useState<StoredFile[]>([]);
@@ -242,19 +243,8 @@ export const JpgToPdfTool: React.FC = () => {
         </div>
       )}
 
-      {/* Helpful On-Page Content & Guide */}
-      <section className="pt-6 border-t border-neutral-200 space-y-4 text-xs text-neutral-600">
-        <h2 className="text-sm font-bold text-black">How to convert JPG and JPEG images to PDF</h2>
-        <ol className="list-decimal list-inside space-y-1.5 text-neutral-600 pl-1">
-          <li>Upload your JPG or JPEG image files into the upload box.</li>
-          <li>Arrange your images in the desired sequence and configure orientation (Auto, Portrait, Landscape) and margins (None, Small, Standard).</li>
-          <li>Click <strong className="text-black font-semibold">Convert to PDF</strong> to generate the PDF document.</li>
-          <li>Download your compiled PDF instantly to your computer or mobile device.</li>
-        </ol>
-        <p className="text-[11px] text-neutral-500 leading-relaxed">
-          Tindry creates standard PDF documents directly in client memory without uploading photos to external servers. High-resolution photos are retained accurately.
-        </p>
-      </section>
+      {/* Comprehensive Editorial & FAQ Section */}
+      <ToolEditorialSection toolId="jpg-to-pdf" />
     </div>
   );
 };

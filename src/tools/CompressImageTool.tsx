@@ -6,6 +6,7 @@ import { ResultCard } from '../components/ResultCard';
 import { compressImage, CompressResult } from '../lib/imageCompressor';
 import { formatBytes } from '../lib/utils';
 import { StoredFile } from '../types/file';
+import { ToolEditorialSection } from '../components/ToolEditorialSection';
 
 export const CompressImageTool: React.FC = () => {
   const [file, setFile] = useState<StoredFile | null>(null);
@@ -231,19 +232,8 @@ export const CompressImageTool: React.FC = () => {
         </div>
       )}
 
-      {/* Helpful On-Page Content & Guide */}
-      <section className="pt-6 border-t border-neutral-200 space-y-4 text-xs text-neutral-600">
-        <h2 className="text-sm font-bold text-black">How to compress images online</h2>
-        <ol className="list-decimal list-inside space-y-1.5 text-neutral-600 pl-1">
-          <li>Upload your JPG, PNG, or WebP image into the compression area above.</li>
-          <li>Adjust the compression quality percentage slider to balance file size and visual clarity.</li>
-          <li>Optionally specify maximum width or height to scale down large camera dimensions.</li>
-          <li>Click <strong className="text-black font-semibold">Compress Image</strong> and download your lightweight compressed file with verified byte savings.</li>
-        </ol>
-        <p className="text-[11px] text-neutral-500 leading-relaxed">
-          All image transformations take place directly in your browser using HTML5 Canvas compression algorithms. No photos are ever uploaded to cloud servers.
-        </p>
-      </section>
+      {/* Comprehensive Editorial & FAQ Section */}
+      <ToolEditorialSection toolId="compress-image" />
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { ProcessingState } from '../components/ProcessingState';
 import { convertPdfToJpg, PdfToJpgProgress, RenderedPage } from '../lib/pdfToJpg';
 import { formatBytes, triggerDownload } from '../lib/utils';
 import { StoredFile } from '../types/file';
+import { ToolEditorialSection } from '../components/ToolEditorialSection';
 
 export const PdfToJpgTool: React.FC = () => {
   const [file, setFile] = useState<StoredFile | null>(null);
@@ -279,18 +280,8 @@ export const PdfToJpgTool: React.FC = () => {
         </div>
       )}
 
-      {/* Helpful On-Page Content & Guide */}
-      <section className="pt-6 border-t border-neutral-200 space-y-4 text-xs text-neutral-600">
-        <h2 className="text-sm font-bold text-black">How to convert PDF pages to JPG images</h2>
-        <ol className="list-decimal list-inside space-y-1.5 text-neutral-600 pl-1">
-          <li>Select or drop your PDF document into the converter.</li>
-          <li>Click <strong className="text-black font-semibold">Convert to JPG</strong> to render every page into a crisp image.</li>
-          <li>Preview individual rendered pages and download single images or a unified ZIP archive containing all pages.</li>
-        </ol>
-        <p className="text-[11px] text-neutral-500 leading-relaxed">
-          Rendering is executed locally using HTML5 Canvas and PDF.js. Your document remains securely within your browser sandbox at all times.
-        </p>
-      </section>
+      {/* Comprehensive Editorial & FAQ Section */}
+      <ToolEditorialSection toolId="pdf-to-jpg" />
     </div>
   );
 };

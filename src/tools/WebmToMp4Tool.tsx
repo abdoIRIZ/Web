@@ -6,6 +6,7 @@ import { ResultCard } from '../components/ResultCard';
 import { convertWebmToMp4, WebmToMp4Progress } from '../lib/webmToMp4';
 import { formatBytes } from '../lib/utils';
 import { StoredFile } from '../types/file';
+import { ToolEditorialSection } from '../components/ToolEditorialSection';
 
 export const WebmToMp4Tool: React.FC = () => {
   const [file, setFile] = useState<StoredFile | null>(null);
@@ -166,19 +167,8 @@ export const WebmToMp4Tool: React.FC = () => {
         </div>
       )}
 
-      {/* Helpful On-Page Content & Guide */}
-      <section className="pt-6 border-t border-neutral-200 space-y-4 text-xs text-neutral-600">
-        <h2 className="text-sm font-bold text-black">How to convert WebM to MP4 online</h2>
-        <ol className="list-decimal list-inside space-y-1.5 text-neutral-600 pl-1">
-          <li>Select or drop your WebM recording or video file into the converter box above.</li>
-          <li>Click <strong className="text-black font-semibold">Convert to MP4</strong> to begin local video transcoding.</li>
-          <li>Our engine encodes the video into standard H.264 video and AAC audio with universal player compatibility.</li>
-          <li>Download your finalized MP4 file directly to your computer, tablet, or phone.</li>
-        </ol>
-        <p className="text-[11px] text-neutral-500 leading-relaxed">
-          Transcoding is executed 100% locally in your browser using client-side WebAssembly. Your videos are never uploaded to any remote server, ensuring complete privacy for your screen recordings and video files.
-        </p>
-      </section>
+      {/* Comprehensive Editorial & FAQ Section */}
+      <ToolEditorialSection toolId="webm-to-mp4" />
     </div>
   );
 };

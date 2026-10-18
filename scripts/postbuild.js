@@ -112,6 +112,15 @@ if (fs.existsSync(distDir)) {
     }
   }
 
+  // Copy record.html to dist/record.html and dist/screen-record/index.html
+  const recordSrc = path.join(rootDir, 'record.html');
+  if (fs.existsSync(recordSrc)) {
+    fs.copyFileSync(recordSrc, path.join(distDir, 'record.html'));
+    const screenRecFolder = path.join(distDir, 'screen-record');
+    fs.mkdirSync(screenRecFolder, { recursive: true });
+    fs.copyFileSync(recordSrc, path.join(screenRecFolder, 'index.html'));
+  }
+
   const indexHtmlPath = path.join(distDir, 'index.html');
   if (fs.existsSync(indexHtmlPath)) {
     const baseHtml = fs.readFileSync(indexHtmlPath, 'utf8');
