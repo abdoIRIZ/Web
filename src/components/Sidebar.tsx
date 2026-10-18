@@ -3,13 +3,21 @@ import {
   Home, 
   Layers, 
   Music, 
-  Video,
+  Video, 
   Files, 
   FileImage, 
   Image as ImageIcon, 
   Minimize2, 
   HelpCircle, 
-  X
+  X,
+  Sparkles,
+  Smartphone,
+  Scaling,
+  RefreshCw,
+  Crop,
+  QrCode,
+  Palette,
+  FileText
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -32,9 +40,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'jpg-to-pdf', label: 'JPG to PDF', icon: FileImage, href: '/jpg-to-pdf' },
     { id: 'pdf-to-jpg', label: 'PDF to JPG', icon: ImageIcon, href: '/pdf-to-jpg' },
     { id: 'compress-image', label: 'Compress Image', icon: Minimize2, href: '/compress-image' },
+    { id: 'background-remover', label: 'Background Remover', icon: Sparkles, href: '/background-remover' },
+    { id: 'heic-to-jpg', label: 'HEIC to JPG Converter', icon: Smartphone, href: '/heic-to-jpg' },
+    { id: 'image-upscaler', label: 'Image Upscaler 4x HD', icon: Scaling, href: '/image-upscaler' },
+    { id: 'png-to-jpg', label: 'PNG to JPG Converter', icon: FileImage, href: '/png-to-jpg' },
+    { id: 'webp-to-jpg', label: 'WEBP to JPG Converter', icon: RefreshCw, href: '/webp-to-jpg' },
+    { id: 'image-resizer', label: 'Image Resizer for Social Media', icon: Crop, href: '/image-resizer' },
+    { id: 'qr-generator', label: 'QR Code Generator', icon: QrCode, href: '/qr-generator' },
+    { id: 'color-palette', label: 'Color Palette Extractor', icon: Palette, href: '/color-palette' },
+    { id: 'word-counter', label: 'Word Counter & Case Converter', icon: FileText, href: '/word-counter' },
   ];
 
-  const handleItemClick = (id: string) => {
+  const handleItemClick = (id: string, href?: string) => {
+    if (href && !['mp4-to-mp3', 'webm-to-mp4', 'merge-pdf', 'jpg-to-pdf', 'pdf-to-jpg', 'compress-image'].includes(id)) {
+      window.location.href = href;
+      return;
+    }
     onNavigate(id);
     onClose();
   };
@@ -118,7 +139,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <a
                 key={item.id}
                 href={item.href || `/${item.id}`}
-                onClick={(e) => { e.preventDefault(); handleItemClick(item.id); }}
+                onClick={(e) => { e.preventDefault(); handleItemClick(item.id, item.href); }}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition-colors text-left ${
                   isActive
                     ? 'bg-black text-white'
