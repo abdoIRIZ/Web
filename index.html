@@ -363,5 +363,30 @@
       </footer>
     </div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <div id="tindry-coffee-popup" aria-live="polite" style="display: none;">
+      <style>
+        #tindry-coffee-popup {
+          position: fixed; bottom: 20px; right: 20px; z-index: 999999;
+          max-width: 360px; width: calc(100% - 32px); background-color: #111111;
+          color: #ffffff; border: 1px solid #262626; border-radius: 12px;
+          padding: 14px 16px; box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+          font-size: 13px; line-height: 1.45; opacity: 0; transform: translateY(20px);
+          transition: opacity 0.3s, transform 0.3s; pointer-events: none;
+        }
+        #tindry-coffee-popup.tindry-show { display: block !important; opacity: 1; transform: translateY(0); pointer-events: auto; }
+        #tindry-coffee-popup .tindry-kofi-btn { display: inline-flex; width: 100%; margin-top: 10px; background-color: #00b9fe; color: #ffffff; font-weight: 700; font-size: 13px; text-decoration: none; padding: 10px 14px; border-radius: 8px; justify-content: center; }
+        @media (max-width: 640px) { #tindry-coffee-popup { right: 16px; left: 16px; bottom: 16px; width: auto; max-width: none; } }
+      </style>
+      <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:6px">
+        <p style="margin:0; color:#f3f3f3">🎉 Done! File never left your phone. Tindry is free. Tip on Ko-fi ☕ to keep it free?</p>
+        <button type="button" id="tindry-coffee-close" style="background:transparent; border:none; color:#888; cursor:pointer; font-size:16px">×</button>
+      </div>
+      <a href="https://ko-fi.com/tindry" target="_blank" rel="noopener noreferrer" class="tindry-kofi-btn">Tip on Ko-fi ☕</a>
+    </div>
+    <script>
+    (function(){var STORAGE_KEY='tindry_kofi_closed';var hideTimeout=null;function getPopup(){return document.getElementById('tindry-coffee-popup');}function hidePopup(){var popup=getPopup();if(!popup)return;popup.classList.remove('tindry-show');setTimeout(function(){if(!popup.classList.contains('tindry-show'))popup.style.display='none';},300);if(hideTimeout){clearTimeout(hideTimeout);hideTimeout=null;}}function showPopup(){try{if(localStorage.getItem(STORAGE_KEY)==='true')return;}catch(e){}var popup=getPopup();if(!popup)return;popup.style.display='block';void popup.offsetHeight;popup.classList.add('tindry-show');hideTimeout=setTimeout(hidePopup,8000);}function dismissPermanently(){try{localStorage.setItem(STORAGE_KEY,'true');}catch(e){}hidePopup();}document.addEventListener('click',function(event){var target=event.target;if(!target)return;if(target.id==='tindry-coffee-close'||(target.closest&&target.closest('#tindry-coffee-close'))){dismissPermanently();return;}if(target.closest&&target.closest('#tindry-coffee-popup'))return;var downloadEl=target.closest?target.closest('a[download], [data-action="download"], button[id*="download" i], a[id*="download" i]'):null;if(!downloadEl&&(target.tagName==='BUTTON'||target.tagName==='A'||(target.closest&&target.closest('button, a')))){var clickable=target.tagName==='BUTTON'||target.tagName==='A'?target:target.closest('button, a');var label=(clickable.innerText||'').trim().toLowerCase();if(label.indexOf('download')!==-1)downloadEl=clickable;}if(downloadEl){setTimeout(showPopup,700);}},false);})();
+    </script>
   </body>
 </html>
